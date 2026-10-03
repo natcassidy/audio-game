@@ -14,9 +14,19 @@ npm run build    # typecheck + production build
 
 ## Status
 
-**Phase 1 (signal engine, device models, unit tests): done.** The app is a
-placeholder that lists what each mixer channel carries. Next up is Phase 2:
-the patch view and probe tool.
+See [docs/PLAN.md](docs/PLAN.md) for the condensed plan.
+
+- **Phase 1, signal engine: done.**
+- **Phase 2, playable sandbox: done.** One screen with a stage view, an
+  inspector (controls, probe, and what each musician hears) and the mixer.
+- **Phase 3, scenarios: next.**
+
+## Code layout
+
+- `src/engine`: the simulation (no UI).
+- `src/ui`: pure UI logic (layout, controls, mixer mapping, cable actions), unit-tested.
+- `src/components`: React views (`StageView`, `Inspector`, `MixerPanel`).
+- `src/store.ts`: Zustand store. It holds the rig and re-simulates on every change.
 
 ## Engine overview (`src/engine`)
 

@@ -34,28 +34,40 @@ export function probePort(sim: Simulation, nodeId: string, portId: string): Prob
   const def = sim.graph.ports.get(nodeId)?.find((p) => p.id === portId);
   const name = `${sim.rig.nodes[nodeId]?.name ?? nodeId} ${def?.label ?? portId}`;
   if (def?.lanes) {
-    let sig: Signal = SILENT;
+    const lanes: { sig: Signal; domain: Domain }[] = [];
     for (const dir of ['tx', 'rx'] as const) {
-      for (let i = 1; i <= def.lanes[dir]; i++) sig = mixSignals(sig, signalAt(sim, lanePointId(nodeId, portId, dir, i)));
+      for (let i = 1; i <= def.lanes[dir]; i++) lanes.push({ sig: signalAt(sim, lanePointId(nodeId, portId, dir, i)), domain: 'line' });
     }
-    return reading(sim, name, sig, 'line');
+    return readingOfLanes(sim, name, lanes);
   }
   return probePoint(sim, portPointId(nodeId, portId));
+}
+
+function readingOfLanes(sim: Simulation, label: string, lanes: { sig: Signal; domain: Domain }[]): ProbeReading {
+  // A multi-channel link (the network cable) reports its loudest channel,
+  // not the sum of all of them, and lists everything it carries.
+  let sig: Signal = SILENT;
+  let best: { sig: Signal; domain: Domain } | undefined;
+  for (const lane of lanes) {
+    sig = mixSignals(sig, lane.sig);
+    if (!best || levelDb(lane.sig) > levelDb(best.sig)) best = lane;
+  }
+  const domain = best?.domain ?? 'line';
+  const r = reading(sim, label, sig, domain);
+  if (lanes.length <= 1) return r;
+  const db = best ? levelDb(best.sig) : -Infinity;
+  return { ...r, db, level: classify(db, domain) };
 }
 
 /** What's travelling down a cable (nothing if it's unplugged, broken or miswired). */
 export function probeCable(sim: Simulation, cableId: string): ProbeReading {
   const link = sim.graph.cables.get(cableId);
   const cable = sim.rig.cables[cableId];
-  const label = cable?.label ?? cableId;
-  let sig: Signal = SILENT;
-  let domain: Domain = 'line';
-  for (const id of link?.edges ?? []) {
-    sig = mixSignals(sig, sim.edgeSignals.get(id) ?? SILENT);
-    const edge = sim.graph.edges[id];
-    domain = sim.domains.get(edge.from) ?? domain;
-  }
-  return reading(sim, label, sig, domain);
+  const lanes = (link?.edges ?? []).map((id) => ({
+    sig: sim.edgeSignals.get(id) ?? SILENT,
+    domain: sim.domains.get(sim.graph.edges[id].from) ?? ('line' as Domain),
+  }));
+  return readingOfLanes(sim, cable?.label ?? cableId, lanes);
 }
 
 export interface ComponentReading {
