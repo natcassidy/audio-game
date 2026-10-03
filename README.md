@@ -19,14 +19,17 @@ See [docs/PLAN.md](docs/PLAN.md) for the condensed plan.
 - **Phase 1, signal engine: done.**
 - **Phase 2, playable sandbox: done.** One screen with a stage view, an
   inspector (controls, probe, and what each musician hears) and the mixer.
-- **Phase 3, scenarios: next.**
+- **Phase 3, scenarios: done.** 16 troubleshooting scenarios with live goals,
+  hints, a debrief, scoring and saved progress.
 
 ## Code layout
 
 - `src/engine`: the simulation (no UI).
 - `src/ui`: pure UI logic (layout, controls, mixer mapping, cable actions), unit-tested.
 - `src/components`: React views (`StageView`, `Inspector`, `MixerPanel`).
-- `src/store.ts`: Zustand store. It holds the rig and re-simulates on every change.
+- `src/game`: scenario logic (win checks, collateral damage, hints, scoring, progress).
+- `src/scenarios`: scenario JSON files. Add a file and it shows up in the menu.
+- `src/store.ts`: Zustand store. It holds the rig, re-simulates on every change, and checks the current scenario.
 
 ## Engine overview (`src/engine`)
 

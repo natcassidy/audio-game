@@ -1,0 +1,34 @@
+{
+  "id": "01-dead-wedge",
+  "title": "One wedge is silent",
+  "difficulty": 1,
+  "intro": "Start where the problem is. Click the silent wedge and look at its lights and its input. Is signal arriving? Is it switched on?",
+  "complaints": [
+    {
+      "who": "Keys player",
+      "says": "My wedge is completely dead. Everyone else can hear theirs."
+    }
+  ],
+  "setup": [
+    {
+      "path": "nodes.wedge-3.props.power.switch",
+      "value": false
+    }
+  ],
+  "win": [
+    {
+      "kind": "hears",
+      "label": "Keys play through Wedge 3",
+      "point": "wedge-3.sound",
+      "source": "keys"
+    }
+  ],
+  "solution": [
+    {
+      "path": "nodes.wedge-3.props.power.switch",
+      "value": true
+    }
+  ],
+  "cause": "Wedge 3's power switch was off. Signal was arriving at its input the whole time.",
+  "lesson": "When one speaker is dead and the rest work, check that speaker first: power, the power cord, and its volume knob. If its input shows signal, the mixer is fine."
+}

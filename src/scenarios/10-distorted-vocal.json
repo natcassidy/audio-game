@@ -1,0 +1,47 @@
+{
+  "id": "10-distorted-vocal",
+  "title": "Distorted vocal",
+  "difficulty": 2,
+  "complaints": [
+    {
+      "who": "Worship leader",
+      "says": "My voice sounds crunchy and distorted in the speakers."
+    }
+  ],
+  "setup": [
+    {
+      "path": "nodes.stagebox.props.preamps.0.gain",
+      "value": 65
+    }
+  ],
+  "win": [
+    {
+      "kind": "clean",
+      "label": "Leader vocal clean in the mains",
+      "point": "mixer.main.l",
+      "source": "leader:voice",
+      "flag": "distorted",
+      "hint": "Turn Ch 1's gain down (Fat Channel) to about 45 dB."
+    },
+    {
+      "kind": "level",
+      "label": "Ch 1 meter in the green",
+      "point": "mixer.ch1.pre",
+      "in": [
+        "good"
+      ],
+      "hint": "Set Ch 1's gain so its meter sits in the green: about 45 dB."
+    }
+  ],
+  "hints": [
+    "Select Ch 1 and look at its meter. Turning the fader down won't help if it's already overloaded before the fader."
+  ],
+  "solution": [
+    {
+      "path": "nodes.stagebox.props.preamps.0.gain",
+      "value": 45
+    }
+  ],
+  "cause": "Ch 1's preamp gain was far too high, so the signal clipped before it reached the fader.",
+  "lesson": "Gain is set once, at the preamp, so the meter sits in the green. Faders set the balance. A distorted signal can't be fixed with the fader."
+}

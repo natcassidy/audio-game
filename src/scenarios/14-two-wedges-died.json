@@ -1,0 +1,46 @@
+{
+  "id": "14-two-wedges-died",
+  "title": "Two wedges died at once",
+  "difficulty": 2,
+  "complaints": [
+    {
+      "who": "Singer 2",
+      "says": "My wedge just died."
+    },
+    {
+      "who": "Bass player",
+      "says": "Mine too \u2014 at the exact same moment."
+    }
+  ],
+  "setup": [
+    {
+      "path": "nodes.strip-left.props.tripped",
+      "value": true
+    }
+  ],
+  "win": [
+    {
+      "kind": "hears",
+      "label": "Wedge 2 working",
+      "point": "wedge-2.sound",
+      "source": "singer2:voice"
+    },
+    {
+      "kind": "hears",
+      "label": "Wedge 4 working",
+      "point": "wedge-4.sound",
+      "source": "bass-player:voice"
+    }
+  ],
+  "hints": [
+    "Two things failing at the same moment usually share something. What do Wedge 2 and Wedge 4 have in common?"
+  ],
+  "solution": [
+    {
+      "path": "nodes.strip-left.props.tripped",
+      "value": false
+    }
+  ],
+  "cause": "Both wedges were plugged into the left power strip, and its breaker had tripped.",
+  "lesson": "When several things on the same side die together, look for a shared power strip. Reset it, and don't overload it."
+}

@@ -1,0 +1,36 @@
+{
+  "id": "06-headset-muted",
+  "title": "Headset dead, but the receiver shows signal",
+  "difficulty": 2,
+  "complaints": [
+    {
+      "who": "Pastor",
+      "says": "My headset isn't working \u2014 but the receiver says it's getting a signal."
+    }
+  ],
+  "setup": [
+    {
+      "path": "nodes.tx-wl1.props.muted",
+      "value": true
+    }
+  ],
+  "win": [
+    {
+      "kind": "hears",
+      "label": "Pastor in the mains",
+      "point": "mixer.main.l",
+      "source": "pastor:voice"
+    }
+  ],
+  "hints": [
+    "RF bars mean the pack is on and on the right frequency. The audio meter tells you whether any sound is coming through."
+  ],
+  "solution": [
+    {
+      "path": "nodes.tx-wl1.props.muted",
+      "value": false
+    }
+  ],
+  "cause": "The WL1 body-pack was muted. It was still transmitting, so the receiver showed RF but no audio.",
+  "lesson": "RF and audio are different things. RF means the link is up; no audio with good RF almost always means the pack is muted or the mic isn't plugged into the pack."
+}

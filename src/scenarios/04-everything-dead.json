@@ -1,0 +1,45 @@
+{
+  "id": "04-everything-dead",
+  "title": "Everything from the stage died",
+  "difficulty": 1,
+  "intro": "When everything fails at once, look for the one thing everything shares.",
+  "complaints": [
+    {
+      "who": "Everyone",
+      "says": "Every mic and every wedge just went silent at the same moment!"
+    }
+  ],
+  "setup": [
+    {
+      "path": "cables.c-network.faults",
+      "value": {
+        "unplugged": "from"
+      }
+    }
+  ],
+  "win": [
+    {
+      "kind": "hears",
+      "label": "Leader vocal in the mains",
+      "point": "mixer.main.l",
+      "source": "leader:voice"
+    },
+    {
+      "kind": "hears",
+      "label": "Leader vocal in Wedge 1",
+      "point": "wedge-1.sound",
+      "source": "leader:voice"
+    }
+  ],
+  "hints": [
+    "Every channel goes through the stagebox to the mixer. What connects those two?"
+  ],
+  "solution": [
+    {
+      "path": "cables.c-network.faults",
+      "value": {}
+    }
+  ],
+  "cause": "The network cable between the stagebox and the mixer had come unplugged at the stagebox.",
+  "lesson": "All 16 inputs and all 8 wedge outputs ride on one network cable. If everything dies at once, check the stagebox's Network light and that cable first."
+}

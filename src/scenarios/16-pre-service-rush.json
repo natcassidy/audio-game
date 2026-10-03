@@ -1,0 +1,71 @@
+{
+  "id": "16-pre-service-rush",
+  "title": "Pre-service rush",
+  "difficulty": 3,
+  "intro": "Service starts in three minutes. Three people need you.",
+  "complaints": [
+    {
+      "who": "Singer 3",
+      "says": "My wedge is silent."
+    },
+    {
+      "who": "Pastor",
+      "says": "My headset isn't in the room."
+    },
+    {
+      "who": "Drummer",
+      "says": "I've lost my whole monitor mix."
+    }
+  ],
+  "setup": [
+    {
+      "path": "nodes.wedge-6.props.volume",
+      "value": 0
+    },
+    {
+      "path": "nodes.mixer.props.channels.13.mute",
+      "value": true
+    },
+    {
+      "path": "nodes.mixer.props.mixes.4.mute",
+      "value": true
+    }
+  ],
+  "win": [
+    {
+      "kind": "hears",
+      "label": "Wedge 6 working",
+      "point": "wedge-6.sound",
+      "source": "singer3:voice"
+    },
+    {
+      "kind": "hears",
+      "label": "Pastor in the mains",
+      "point": "mixer.main.l",
+      "source": "pastor:voice"
+    },
+    {
+      "kind": "hears",
+      "label": "Drummer's wedge working",
+      "point": "wedge-5.sound",
+      "source": "bass"
+    }
+  ],
+  "timeLimit": 180,
+  "solution": [
+    {
+      "path": "nodes.wedge-6.props.volume",
+      "value": 7
+    },
+    {
+      "path": "nodes.mixer.props.channels.13.mute",
+      "value": false
+    },
+    {
+      "path": "nodes.mixer.props.mixes.4.mute",
+      "value": false
+    }
+  ],
+  "cause": "Wedge 6's volume knob was at zero, the WL1 channel was muted, and Mix 5 (the drummer's mix) was muted.",
+  "lesson": "Under time pressure, start with the quickest checks: knobs, mutes and power. Most pre-service problems are one switch."
+}

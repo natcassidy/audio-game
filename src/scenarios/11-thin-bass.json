@@ -1,0 +1,38 @@
+{
+  "id": "11-thin-bass",
+  "title": "Thin bass everywhere",
+  "difficulty": 2,
+  "complaints": [
+    {
+      "who": "Someone in the congregation",
+      "says": "The bass sounds thin and weak today, even in the mains."
+    }
+  ],
+  "setup": [
+    {
+      "path": "nodes.mixer.props.channels.7.hpf",
+      "value": 250
+    }
+  ],
+  "win": [
+    {
+      "kind": "clean",
+      "label": "Full-sounding bass in the mains",
+      "point": "mixer.main.l",
+      "source": "bass",
+      "flag": "thin",
+      "hint": "Turn Ch 8's HPF off (or to 80 Hz at most)."
+    }
+  ],
+  "hints": [
+    "The bass reaches everywhere, so nothing is unplugged. Something on the Bass channel is cutting its low end."
+  ],
+  "solution": [
+    {
+      "path": "nodes.mixer.props.channels.7.hpf",
+      "value": 0
+    }
+  ],
+  "cause": "The high-pass filter on the Bass channel was set to 250 Hz, cutting away most of the bass.",
+  "lesson": "A high-pass filter cuts rumble below its frequency. Great on vocals around 100 Hz, but bass and kick drum need it off or very low."
+}

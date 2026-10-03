@@ -1,0 +1,42 @@
+{
+  "id": "03-bass-dead-everywhere",
+  "title": "Bass is dead everywhere",
+  "difficulty": 2,
+  "complaints": [
+    {
+      "who": "Worship leader",
+      "says": "The bass has disappeared from the mains and every wedge. The bass player says his amp sounds fine."
+    }
+  ],
+  "setup": [
+    {
+      "path": "nodes.bass-di.props.battery",
+      "value": "dead"
+    }
+  ],
+  "win": [
+    {
+      "kind": "hears",
+      "label": "Bass in the mains",
+      "point": "mixer.main.l",
+      "source": "bass"
+    },
+    {
+      "kind": "hears",
+      "label": "Bass in the drummer's wedge",
+      "point": "wedge-5.sound",
+      "source": "bass"
+    }
+  ],
+  "hints": [
+    "The amp still works, so the bass and its cable are fine. What sits between the bass and the stagebox?"
+  ],
+  "solution": [
+    {
+      "path": "nodes.bass-di.props.battery",
+      "value": "good"
+    }
+  ],
+  "cause": "The bass DI is an active DI and its battery died. The amp kept working because the DI's thru jack is passive.",
+  "lesson": "Active DIs need a battery or 48V phantom power. Turning on 48V for the DI's input is the quick fix mid-service; swap the battery afterwards."
+}

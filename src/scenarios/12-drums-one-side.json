@@ -1,0 +1,51 @@
+{
+  "id": "12-drums-one-side",
+  "title": "Drums on one side only",
+  "difficulty": 2,
+  "complaints": [
+    {
+      "who": "Someone sitting on the right",
+      "says": "The drums are only coming out of the left speaker."
+    }
+  ],
+  "setup": [
+    {
+      "path": "nodes.mixer.props.channels.10.link",
+      "value": false
+    },
+    {
+      "path": "nodes.mixer.props.channels.10.pan",
+      "value": -1
+    },
+    {
+      "path": "nodes.mixer.props.channels.11.pan",
+      "value": 1
+    },
+    {
+      "path": "nodes.mixer.props.channels.11.fader",
+      "value": -100
+    }
+  ],
+  "win": [
+    {
+      "kind": "balanced",
+      "label": "Drums equally loud left and right",
+      "a": "mixer.main.l",
+      "b": "mixer.main.r",
+      "source": "drums:kit",
+      "maxDiffDb": 3,
+      "hint": "Select Ch 11 and turn Link 11+12 back on."
+    }
+  ],
+  "hints": [
+    "The drums come in on a stereo pair of room mics, channels 11 and 12. Are both channels up?"
+  ],
+  "solution": [
+    {
+      "path": "nodes.mixer.props.channels.10.link",
+      "value": true
+    }
+  ],
+  "cause": "The Room L/R channels had been unlinked, and Room R's fader was down, so only the left room mic reached the mains.",
+  "lesson": "Stereo pairs (room mics, keys L/R) should be linked so one fader moves both sides together."
+}

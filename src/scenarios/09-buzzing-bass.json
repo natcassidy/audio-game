@@ -1,0 +1,45 @@
+{
+  "id": "09-buzzing-bass",
+  "title": "Buzzing bass",
+  "difficulty": 2,
+  "complaints": [
+    {
+      "who": "Bass player",
+      "says": "There's a buzz in the speakers whenever I'm plugged in."
+    }
+  ],
+  "setup": [
+    {
+      "path": "nodes.bass-di.faults",
+      "value": {
+        "groundLoop": true
+      }
+    }
+  ],
+  "win": [
+    {
+      "kind": "silent",
+      "label": "No hum in the mains",
+      "point": "mixer.main.l",
+      "source": "bass-di:hum",
+      "hint": "Press Ground Lift on the bass DI."
+    },
+    {
+      "kind": "hears",
+      "label": "Bass still in the mains",
+      "point": "mixer.main.l",
+      "source": "bass"
+    }
+  ],
+  "hints": [
+    "Probe the bass channel. What's on it besides the bass?"
+  ],
+  "solution": [
+    {
+      "path": "nodes.bass-di.props.groundLift",
+      "value": true
+    }
+  ],
+  "cause": "A ground loop between the bass rig and the sound system was adding hum at the DI.",
+  "lesson": "Hum that comes and goes with one instrument is usually a ground loop. The DI's Ground Lift switch breaks the loop without touching the audio."
+}
