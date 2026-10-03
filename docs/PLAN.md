@@ -32,23 +32,32 @@ Merges the old phases 2–5 (patch view, probe tool, mixer view, stage view,
 or move an end instead), the separate patch table, scenes, and FX in the UI
 (still in the engine), and Mixes 9–16 in the UI.
 
-## Next
-
 ### Phase 3: Scenarios
 Merges the old phases 6–8.
 
-- Scenario JSON files: a complaint, the faults to inject, and a win
-  condition such as "bass reaches Wedge 3".
-- Starter scenarios 1–15. Tutorials are just the first few, easy scenarios
-  with extra hint text, not a separate mode.
-- Escalating hints from `trace()` (using `prefer` with the known-good rig).
-- Debrief: the signal path, where it broke, and the real-world lesson.
-- Simple scoring (time, hints used, collateral damage) and progress saved in
-  localStorage.
+- 16 scenarios as JSON in `src/scenarios/`: starter scenarios 1–14, a
+  two-fault scenario, and a 3-minute pre-service rush. Tutorials are the
+  easy ones, with an intro line. Each file has the complaint, the faults
+  (path/value edits to the default rig), win conditions, a known solution,
+  the cause and the lesson.
+- Goals are checked live after every change. A win also requires that
+  nothing that works in the healthy rig is broken (collateral damage).
+- Escalating hints: the scenario's own nudges, then where the signal stops,
+  then exactly why. They're generated from `trace()`, using the healthy
+  rig's route as the reference.
+- Debrief: what was wrong, where the signal died, the working signal path,
+  and the lesson. "Give up" shows the answer and can apply the fix on stage.
+- Scoring: stars and points, losing points for hints, collateral damage and
+  time. The best result per scenario is saved in localStorage.
+- Tests prove every scenario starts broken, its solution wins with nothing
+  else broken, and its hints end with something specific.
+
+Not included: the click-routed-to-Main scenario (it needs the extended
+click/tracks device) and the full-soundcheck mode.
 
 ## Maybe later
+- The click-routed-to-Main scenario, and full soundcheck from a blank board.
 - Extended devices (choir mics, in-ears, click/tracks laptop, livestream mix,
   subwoofer).
-- Pre-service rush and full-soundcheck modes.
 - Signal-flow animation.
 - Real audio with Web Audio.

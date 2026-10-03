@@ -1,0 +1,54 @@
+{
+  "id": "15-two-problems",
+  "title": "Two problems at once",
+  "difficulty": 3,
+  "complaints": [
+    {
+      "who": "Drummer",
+      "says": "I can't hear the hi-hat mic at all."
+    },
+    {
+      "who": "Worship leader",
+      "says": "And my acoustic guitar has gone silent."
+    }
+  ],
+  "setup": [
+    {
+      "path": "nodes.stagebox.props.preamps.9.phantom",
+      "value": false
+    },
+    {
+      "path": "nodes.tuner.props.engaged",
+      "value": true
+    }
+  ],
+  "win": [
+    {
+      "kind": "hears",
+      "label": "Hi-hat on its own channel",
+      "point": "mixer.ch10.pre",
+      "source": "drums:hihat"
+    },
+    {
+      "kind": "hears",
+      "label": "Acoustic guitar in the mains",
+      "point": "mixer.main.l",
+      "source": "acoustic"
+    }
+  ],
+  "hints": [
+    "These are two separate faults. Take them one at a time."
+  ],
+  "solution": [
+    {
+      "path": "nodes.stagebox.props.preamps.9.phantom",
+      "value": true
+    },
+    {
+      "path": "nodes.tuner.props.engaged",
+      "value": false
+    }
+  ],
+  "cause": "48V phantom power was off for the hi-hat condenser mic, and the leader's tuner pedal was left engaged.",
+  "lesson": "With several complaints, fix one, confirm it, then move to the next. Condensers need 48V; tuner pedals mute while engaged."
+}

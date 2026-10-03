@@ -1,0 +1,50 @@
+{
+  "id": "07-wrong-mix",
+  "title": "Someone else's mix in my wedge",
+  "difficulty": 2,
+  "complaints": [
+    {
+      "who": "Keys player",
+      "says": "I'm hearing the bass player's voice in my wedge, not mine."
+    }
+  ],
+  "setup": [
+    {
+      "path": "nodes.mixer.props.networkPatch.2",
+      "value": "mix4"
+    },
+    {
+      "path": "nodes.mixer.props.networkPatch.3",
+      "value": "mix3"
+    }
+  ],
+  "win": [
+    {
+      "kind": "hears",
+      "label": "Keys player vocal in Wedge 3",
+      "point": "wedge-3.sound",
+      "source": "keys-player:voice"
+    },
+    {
+      "kind": "silent",
+      "label": "Bass player's vocal out of Wedge 3",
+      "point": "wedge-3.sound",
+      "source": "bass-player:voice"
+    }
+  ],
+  "hints": [
+    "The mix sounds right on the mixer. So which mix actually comes out of the stagebox output for Wedge 3?"
+  ],
+  "solution": [
+    {
+      "path": "nodes.mixer.props.networkPatch.2",
+      "value": "mix3"
+    },
+    {
+      "path": "nodes.mixer.props.networkPatch.3",
+      "value": "mix4"
+    }
+  ],
+  "cause": "The mixer's output patch had Mix 3 and Mix 4 swapped, so the keys and bass wedges got each other's mixes.",
+  "lesson": "Wedge mixes are routed to stagebox outputs in the mixer's output patch. If a wedge has the wrong mix, check the patch before re-doing the mix."
+}

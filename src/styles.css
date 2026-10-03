@@ -87,8 +87,18 @@ h3 {
   border-bottom: 1px solid var(--line);
 }
 
-.topbar button {
+.topbar .push-right {
   margin-left: auto;
+}
+
+.tabs {
+  display: flex;
+  gap: 4px;
+}
+
+.tabs button.active {
+  background: #1d3a5c;
+  border-color: var(--accent);
 }
 
 .workspace {
@@ -675,4 +685,169 @@ h3 {
 .phones {
   margin-top: 8px;
   font-size: 12.5px;
+}
+
+/* --- Scenarios ------------------------------------------------------------ */
+
+.menu {
+  padding: 16px;
+  max-width: 1200px;
+}
+
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 12px;
+  margin-top: 12px;
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  text-align: left;
+  padding: 12px 14px;
+  border-radius: 10px;
+  background: var(--panel);
+  position: relative;
+  padding-right: 34px;
+}
+
+.card-done {
+  border-color: #2d5a3e;
+}
+
+.card-num {
+  position: absolute;
+  top: 10px;
+  right: 12px;
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.card-quote {
+  font-style: italic;
+  color: #c3c8d4;
+  font-size: 13px;
+}
+
+.stars {
+  color: #e3c23c;
+  letter-spacing: 2px;
+}
+
+.stars .muted {
+  color: #3a3f4b;
+}
+
+.scenario-bar {
+  margin: 12px 16px 0;
+  padding: 10px 14px;
+  background: var(--panel);
+  border: 1px solid var(--accent);
+  border-radius: 10px;
+}
+
+.scenario-head {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+.scenario-actions {
+  display: flex;
+  gap: 6px;
+  margin-left: auto;
+  flex-wrap: wrap;
+}
+
+.clock {
+  font-variant-numeric: tabular-nums;
+  font-size: 16px;
+  color: var(--muted);
+}
+
+.clock-urgent {
+  color: var(--clip);
+  font-weight: 700;
+}
+
+.intro {
+  color: #c3c8d4;
+  margin: 6px 0;
+}
+
+.complaints {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 8px 0;
+}
+
+.bubble {
+  margin: 0;
+  padding: 6px 12px;
+  background: #2b3240;
+  border-radius: 12px 12px 12px 2px;
+}
+
+.goals {
+  list-style: none;
+  padding: 0;
+  margin: 4px 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 18px;
+  color: var(--muted);
+}
+
+.goal-met {
+  color: var(--good);
+}
+
+.hints {
+  margin: 8px 0 2px;
+  padding-left: 22px;
+  color: #f2d08a;
+}
+
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(8, 9, 12, 0.7);
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 6vh 16px;
+  overflow: auto;
+  z-index: 10;
+}
+
+.debrief {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 18px 22px;
+  max-width: 640px;
+  width: 100%;
+}
+
+.debrief h2 {
+  font-size: 22px;
+}
+
+.score {
+  font-size: 15px;
+}
+
+.path {
+  font-size: 13px;
+  color: #c3c8d4;
+}
+
+.lesson {
+  padding: 8px 12px;
+  border-left: 3px solid var(--good);
+  background: #1b2a22;
 }

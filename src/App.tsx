@@ -1,29 +1,47 @@
 import { Inspector } from './components/Inspector';
 import { MixerPanel } from './components/MixerPanel';
+import { Debrief, ScenarioBar, ScenarioMenu } from './components/Scenario';
 import { StageView } from './components/StageView';
 import { useGame } from './store';
 
 export function App() {
-  const reset = useGame((s) => s.reset);
+  const { screen, reset, openSandbox, openMenu } = useGame();
   const warnings = useGame((s) => s.sim.warnings);
   return (
     <div className="app">
       <header className="topbar">
         <h1>Church Sound Simulator</h1>
-        <span className="muted">Sandbox — everything starts working. Change anything and see what happens.</span>
-        <button onClick={reset} title="Put everything back to the working setup">
-          Reset rig
-        </button>
+        <nav className="tabs">
+          <button className={screen === 'sandbox' ? 'active' : ''} onClick={openSandbox} title="Everything working. Change anything.">
+            Sandbox
+          </button>
+          <button className={screen !== 'sandbox' ? 'active' : ''} onClick={openMenu} title="Troubleshooting challenges">
+            Scenarios
+          </button>
+        </nav>
+        {screen === 'sandbox' && (
+          <button className="push-right" onClick={reset} title="Put everything back to the working setup">
+            Reset rig
+          </button>
+        )}
       </header>
-      {warnings.length > 0 && <div className="banner">{warnings.join(' · ')}</div>}
-      <main className="workspace">
-        <div className="stage-wrap">
-          <StageView />
-          <Legend />
-        </div>
-        <Inspector />
-      </main>
-      <MixerPanel />
+      {screen === 'menu' ? (
+        <ScenarioMenu />
+      ) : (
+        <>
+          {warnings.length > 0 && <div className="banner">{warnings.join(' · ')}</div>}
+          <ScenarioBar />
+          <main className="workspace">
+            <div className="stage-wrap">
+              <StageView />
+              <Legend />
+            </div>
+            <Inspector />
+          </main>
+          <MixerPanel />
+          <Debrief />
+        </>
+      )}
     </div>
   );
 }

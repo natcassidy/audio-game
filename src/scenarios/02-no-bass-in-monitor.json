@@ -1,0 +1,43 @@
+{
+  "id": "02-no-bass-in-monitor",
+  "title": "\"No bass in my monitor\"",
+  "difficulty": 1,
+  "intro": "Each wedge has its own mix on the mixer. Pick that mix with the buttons above the faders. In a mix, the faders set how much of each channel goes to that wedge.",
+  "complaints": [
+    {
+      "who": "Keys player",
+      "says": "I can't hear the bass in my wedge."
+    }
+  ],
+  "setup": [
+    {
+      "path": "nodes.mixer.props.channels.7.sends.2",
+      "value": -100
+    }
+  ],
+  "win": [
+    {
+      "kind": "hears",
+      "label": "Bass in Wedge 3",
+      "point": "wedge-3.sound",
+      "source": "bass"
+    },
+    {
+      "kind": "mixerMode",
+      "label": "Faders back on Main when you're done",
+      "mode": "main",
+      "hint": "Click Main above the faders so the faders control the room again."
+    }
+  ],
+  "hints": [
+    "Wedge 3 plays Mix 3. Which channels are being sent to Mix 3?"
+  ],
+  "solution": [
+    {
+      "path": "nodes.mixer.props.channels.7.sends.2",
+      "value": -14
+    }
+  ],
+  "cause": "The Bass channel's send to Mix 3 (the keys wedge) was turned all the way down.",
+  "lesson": "A monitor mix only has what you send to it. Select the mix, then bring that channel's fader up \u2014 and remember to go back to Main afterwards."
+}

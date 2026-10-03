@@ -1,0 +1,48 @@
+{
+  "id": "13-feedback",
+  "title": "Feedback in the leader's wedge",
+  "difficulty": 2,
+  "complaints": [
+    {
+      "who": "Worship leader",
+      "says": "There's a loud squeal every time I step up to the mic!"
+    }
+  ],
+  "setup": [
+    {
+      "path": "nodes.mixer.props.channels.0.sends.0",
+      "value": 10
+    },
+    {
+      "path": "nodes.wedge-1.props.volume",
+      "value": 10
+    }
+  ],
+  "win": [
+    {
+      "kind": "noFeedback",
+      "label": "No feedback"
+    },
+    {
+      "kind": "hears",
+      "label": "Leader still hears themselves in Wedge 1",
+      "point": "wedge-1.sound",
+      "source": "leader:voice"
+    }
+  ],
+  "hints": [
+    "Feedback is a loop: the mic hears the wedge, which plays the mic. What's pushing that loop too hard?"
+  ],
+  "solution": [
+    {
+      "path": "nodes.mixer.props.channels.0.sends.0",
+      "value": -8
+    },
+    {
+      "path": "nodes.wedge-1.props.volume",
+      "value": 7
+    }
+  ],
+  "cause": "Vox 1's send to the leader's wedge and the wedge's own volume were both turned way up, so the mic was hearing itself louder than the singer.",
+  "lesson": "Fix feedback by turning down that mic in that wedge's mix (or the wedge's volume) \u2014 not by muting the singer. Point mics away from wedges."
+}

@@ -1,0 +1,37 @@
+{
+  "id": "05-handheld-dead",
+  "title": "The handheld is dead",
+  "difficulty": 1,
+  "intro": "Wireless mics have two halves: the transmitter (the mic) and the receiver (by the stagebox). Check both.",
+  "complaints": [
+    {
+      "who": "Host",
+      "says": "My handheld mic isn't working at all."
+    }
+  ],
+  "setup": [
+    {
+      "path": "nodes.tx-hh.props.battery",
+      "value": "dead"
+    }
+  ],
+  "win": [
+    {
+      "kind": "hears",
+      "label": "Host in the mains",
+      "point": "mixer.main.l",
+      "source": "host:voice"
+    }
+  ],
+  "hints": [
+    "Look at the handheld receiver's RF bars. Is the transmitter on the air at all?"
+  ],
+  "solution": [
+    {
+      "path": "nodes.tx-hh.props.battery",
+      "value": "good"
+    }
+  ],
+  "cause": "The handheld mic's battery was dead, so it wasn't transmitting. The receiver showed no RF.",
+  "lesson": "No RF on the receiver means the transmitter isn't on: battery, power switch, or the wrong frequency. Put fresh batteries in wireless mics before every service."
+}

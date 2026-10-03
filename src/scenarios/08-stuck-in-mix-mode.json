@@ -1,0 +1,57 @@
+{
+  "id": "08-stuck-in-mix-mode",
+  "title": "The faders don't change the room",
+  "difficulty": 1,
+  "intro": "Look at the buttons above the faders: they decide what the faders control.",
+  "complaints": [
+    {
+      "who": "Someone at the back",
+      "says": "We can't hear the host!"
+    },
+    {
+      "who": "You",
+      "says": "I pushed the Handheld fader up, but nothing changed in the room."
+    }
+  ],
+  "setup": [
+    {
+      "path": "nodes.mixer.props.selectedMix",
+      "value": "mix3"
+    },
+    {
+      "path": "nodes.mixer.props.channels.15.fader",
+      "value": -30
+    }
+  ],
+  "win": [
+    {
+      "kind": "mixerMode",
+      "label": "Faders back on Main",
+      "mode": "main",
+      "hint": "Click Main above the faders. You were adjusting Mix 3 (the keys wedge)."
+    },
+    {
+      "kind": "hears",
+      "label": "Host loud enough in the mains",
+      "point": "mixer.main.l",
+      "source": "host:voice",
+      "minDb": -20,
+      "hint": "In Main mode, bring the Handheld fader up to around -10."
+    }
+  ],
+  "hints": [
+    "Read the orange banner above the faders."
+  ],
+  "solution": [
+    {
+      "path": "nodes.mixer.props.selectedMix",
+      "value": "main"
+    },
+    {
+      "path": "nodes.mixer.props.channels.15.fader",
+      "value": -10
+    }
+  ],
+  "cause": "The mixer was left in Mix 3 mode, so the faders were changing the keys wedge instead of the room. The Handheld fader in Main was also down.",
+  "lesson": "Always check which mix is selected before moving faders. After building a monitor mix, go straight back to Main."
+}
