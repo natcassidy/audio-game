@@ -35,8 +35,11 @@ or move an end instead), the separate patch table, scenes, and FX in the UI
 ### Phase 3: Scenarios
 Merges the old phases 6–8.
 
-- 16 scenarios as JSON in `src/scenarios/`: starter scenarios 1–14, a
-  two-fault scenario, and a 3-minute pre-service rush. Tutorials are the
+- 26 scenarios as JSON in `src/scenarios/`: starter scenarios 1–14, a
+  two-fault scenario, a 3-minute pre-service rush, and scenarios 17–26
+  (wireless dropouts and interference, a crackly cable, Main mute and
+  assign, input source, swapped inputs, receiver output level, a
+  post-fader monitor mix, and a second pre-service rush). Tutorials are the
   easy ones, with an intro line. Each file has the complaint, the faults
   (path/value edits to the default rig), win conditions, a known solution,
   the cause and the lesson.

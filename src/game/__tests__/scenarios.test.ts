@@ -22,9 +22,9 @@ function pathExists(path: string): boolean {
 }
 
 describe('scenario files', () => {
-  it('there are 16, with unique ids, in order', () => {
-    expect(SCENARIOS).toHaveLength(16);
-    expect(new Set(SCENARIOS.map((s) => s.id)).size).toBe(16);
+  it('there are 26, with unique ids, in order', () => {
+    expect(SCENARIOS).toHaveLength(26);
+    expect(new Set(SCENARIOS.map((s) => s.id)).size).toBe(26);
     expect(SCENARIOS[0].id).toBe('01-dead-wedge');
     expect(scenarioById('13-feedback')?.title).toMatch(/Feedback/);
   });
@@ -119,6 +119,17 @@ describe('hints point at the actual fault', () => {
     expect(e.won).toBe(false);
     expect(e.collateral.map((g) => g.label)).toEqual(['Pastor in the mains']);
     expect(hintsFor(s, sim, healthy, guards).at(-1)).toBe('Ch 14 (WL1) is muted.');
+  });
+});
+
+describe('post-fader wedge', () => {
+  it('raising the room fader is not the fix', () => {
+    const s = scenarioById('25-post-fader-wedge')!;
+    const rig = startRig(s);
+    setPath(rig, 'nodes.mixer.props.channels.0.fader', 0);
+    const e = evaluate(simulate(rig), s, guards);
+    expect(e.met).toEqual([true, false]);
+    expect(e.won).toBe(false);
   });
 });
 

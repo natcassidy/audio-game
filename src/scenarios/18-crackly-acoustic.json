@@ -1,0 +1,41 @@
+{
+  "id": "18-crackly-acoustic",
+  "title": "Crackly acoustic",
+  "difficulty": 1,
+  "intro": "Probe the cables along the acoustic guitar's path.",
+  "complaints": [
+    {
+      "who": "Worship leader",
+      "says": "My guitar keeps crackling and cutting out when I move."
+    }
+  ],
+  "setup": [
+    {
+      "path": "cables.c-acoustic.faults",
+      "value": {
+        "intermittent": true
+      }
+    }
+  ],
+  "win": [
+    {
+      "kind": "clean",
+      "label": "Acoustic clean in the mains",
+      "hint": "The Acoustic guitar cable is failing. Swap it for a new one.",
+      "point": "mixer.main.l",
+      "source": "acoustic",
+      "flag": "intermittent"
+    }
+  ],
+  "hints": [
+    "Crackles that change when someone moves are almost always a cable."
+  ],
+  "solution": [
+    {
+      "path": "cables.c-acoustic.faults",
+      "value": {}
+    }
+  ],
+  "cause": "The acoustic guitar's cable was failing, so the signal crackled and dropped whenever it moved.",
+  "lesson": "When a sound crackles with movement, swap the cable first. Keep spare instrument cables at the stage."
+}

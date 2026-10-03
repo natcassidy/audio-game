@@ -1,0 +1,76 @@
+{
+  "id": "26-sunday-rush-2",
+  "title": "Sunday rush 2",
+  "difficulty": 3,
+  "intro": "Doors open in three minutes. Three things are wrong.",
+  "complaints": [
+    {
+      "who": "Pastor",
+      "says": "My headset keeps cutting out."
+    },
+    {
+      "who": "Singer 2",
+      "says": "My family says they can't hear me."
+    },
+    {
+      "who": "Keys player",
+      "says": "My keys are gone everywhere."
+    }
+  ],
+  "setup": [
+    {
+      "path": "nodes.tx-wl1.props.battery",
+      "value": "low"
+    },
+    {
+      "path": "nodes.mixer.props.channels.1.toMain",
+      "value": false
+    },
+    {
+      "path": "nodes.mixer.props.channels.6.source",
+      "value": "usb"
+    }
+  ],
+  "win": [
+    {
+      "kind": "clean",
+      "label": "Pastor clear in the mains",
+      "hint": "The WL1 body-pack's battery is low. Replace it.",
+      "point": "mixer.main.l",
+      "source": "pastor:voice",
+      "flag": "intermittent"
+    },
+    {
+      "kind": "hears",
+      "label": "Singer 2 in the mains",
+      "point": "mixer.main.l",
+      "source": "singer2:voice"
+    },
+    {
+      "kind": "hears",
+      "label": "Keys in the mains",
+      "point": "mixer.main.l",
+      "source": "keys"
+    }
+  ],
+  "timeLimit": 180,
+  "hints": [
+    "Three separate faults. Take the quickest one first."
+  ],
+  "solution": [
+    {
+      "path": "nodes.tx-wl1.props.battery",
+      "value": "good"
+    },
+    {
+      "path": "nodes.mixer.props.channels.1.toMain",
+      "value": true
+    },
+    {
+      "path": "nodes.mixer.props.channels.6.source",
+      "value": "network"
+    }
+  ],
+  "cause": "The WL1 body-pack battery was low, Vox 2 wasn't assigned to Main, and the Keys channel was set to USB input.",
+  "lesson": "Most pre-service problems are a battery, a button or a setting. Work through them one at a time and confirm each before moving on."
+}

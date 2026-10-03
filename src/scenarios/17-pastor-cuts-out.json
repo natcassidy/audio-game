@@ -1,0 +1,39 @@
+{
+  "id": "17-pastor-cuts-out",
+  "title": "Pastor cuts in and out",
+  "difficulty": 1,
+  "intro": "Check the wireless receiver's RF and battery lights before anything else.",
+  "complaints": [
+    {
+      "who": "Pastor",
+      "says": "People say my headset keeps cutting in and out."
+    }
+  ],
+  "setup": [
+    {
+      "path": "nodes.tx-wl1.props.battery",
+      "value": "low"
+    }
+  ],
+  "win": [
+    {
+      "kind": "clean",
+      "label": "Pastor clear in the mains, no dropouts",
+      "hint": "The WL1 body-pack's battery is low. Replace it.",
+      "point": "mixer.main.l",
+      "source": "pastor:voice",
+      "flag": "intermittent"
+    }
+  ],
+  "hints": [
+    "Dropouts on a wireless mic are usually the battery or the radio link. Look at the WL1 receiver and body-pack."
+  ],
+  "solution": [
+    {
+      "path": "nodes.tx-wl1.props.battery",
+      "value": "good"
+    }
+  ],
+  "cause": "The WL1 body-pack battery was low, so the transmitter's signal was weak and the receiver kept losing it.",
+  "lesson": "Put fresh batteries in every wireless pack before each service. A low battery shows up as dropouts long before the mic dies."
+}

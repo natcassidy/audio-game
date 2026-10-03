@@ -1,0 +1,48 @@
+{
+  "id": "21-headsets-fighting",
+  "title": "Two headsets fighting",
+  "difficulty": 2,
+  "complaints": [
+    {
+      "who": "Pastor",
+      "says": "My headset sounds garbled, and I can hear the associate pastor in it."
+    },
+    {
+      "who": "Associate pastor",
+      "says": "And mine's not in the room at all."
+    }
+  ],
+  "setup": [
+    {
+      "path": "nodes.tx-wl2.props.frequency",
+      "value": 518.2
+    }
+  ],
+  "win": [
+    {
+      "kind": "clean",
+      "label": "Pastor clear in the mains",
+      "hint": "The WL2 body-pack is on WL1's frequency (518.200). Set it to 524.600 to match the WL2 receiver.",
+      "point": "mixer.main.l",
+      "source": "pastor:voice",
+      "flag": "interference"
+    },
+    {
+      "kind": "hears",
+      "label": "Associate pastor in the mains",
+      "point": "mixer.main.l",
+      "source": "associate:voice"
+    }
+  ],
+  "hints": [
+    "Compare the frequency on each body-pack with the receiver it's meant to talk to."
+  ],
+  "solution": [
+    {
+      "path": "nodes.tx-wl2.props.frequency",
+      "value": 524.6
+    }
+  ],
+  "cause": "The WL2 body-pack had been set to WL1's frequency, so both packs were talking to the WL1 receiver and WL2's receiver heard nothing.",
+  "lesson": "Each transmitter needs its own frequency, matched to its own receiver. Two packs on one frequency interfere with each other."
+}

@@ -46,8 +46,10 @@ function hearsDirect(sim: Simulation, point: string, source: string, atLeast: Le
 
 export function isMet(sim: Simulation, c: Condition): boolean {
   switch (c.kind) {
-    case 'hears':
-      return hearsDirect(sim, c.point, c.source, c.atLeast) && (c.minDb === undefined || componentAt(sim, c.point, c.source).db >= c.minDb);
+    case 'hears': {
+      const db = componentAt(sim, c.point, c.source).db;
+      return hearsDirect(sim, c.point, c.source, c.atLeast) && (c.minDb === undefined || db >= c.minDb) && (c.maxDb === undefined || db <= c.maxDb);
+    }
     case 'silent':
       return !hearsDirect(sim, c.point, c.source);
     case 'clean':
@@ -170,7 +172,7 @@ function conditionHints(sim: Simulation, healthy: Simulation, c: Condition): [st
     const origin = t.path[0];
     return [`${t.sourceLabel} starts at ${placeName(sim, origin?.nodeId)}.`, c.hint ?? `Stop ${t.sourceLabel} at its source.`];
   }
-  if (t.noRoute) return [`Something isn't connected on the way to ${t.destination}.`, `${t.noRoute}.`];
+  if (t.noRoute) return [`Something isn't connected on the way to ${t.destination}.`, c.hint ?? `${t.noRoute}.`];
   if (t.break) {
     const at = t.path[t.break.hop]?.label;
     return [`The signal stops at ${placeName(sim, t.break.nodeId, t.break.cableId, at)}.`, `${t.break.reason}.`];

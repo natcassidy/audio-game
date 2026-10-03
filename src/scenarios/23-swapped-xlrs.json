@@ -1,0 +1,61 @@
+{
+  "id": "23-swapped-xlrs",
+  "title": "Keys on the tom channel",
+  "difficulty": 2,
+  "complaints": [
+    {
+      "who": "Drummer",
+      "says": "When I hit my tom, the Keys meter jumps."
+    },
+    {
+      "who": "Keys player",
+      "says": "And my keys show up on the Tom fader."
+    }
+  ],
+  "setup": [
+    {
+      "path": "cables.c-in7.to.port",
+      "value": "in9"
+    },
+    {
+      "path": "cables.c-in9.to.port",
+      "value": "in7"
+    }
+  ],
+  "win": [
+    {
+      "kind": "hears",
+      "label": "Keys on the Keys channel",
+      "hint": "The Keys DI XLR is in Stagebox In 9 and the Tom XLR is in In 7. Move each back to its own input.",
+      "point": "mixer.ch7.pre",
+      "source": "keys"
+    },
+    {
+      "kind": "hears",
+      "label": "Tom on the Tom channel",
+      "point": "mixer.ch9.pre",
+      "source": "drums:tom"
+    },
+    {
+      "kind": "silent",
+      "label": "No tom on the Keys channel",
+      "point": "mixer.ch7.pre",
+      "source": "drums:tom"
+    }
+  ],
+  "hints": [
+    "Two sources traded places. Follow each XLR from the stage to the stagebox."
+  ],
+  "solution": [
+    {
+      "path": "cables.c-in7.to.port",
+      "value": "in7"
+    },
+    {
+      "path": "cables.c-in9.to.port",
+      "value": "in9"
+    }
+  ],
+  "cause": "The Keys DI and Tom mic XLRs were plugged into each other's stagebox inputs.",
+  "lesson": "Label both ends of every cable and keep an input list at the stagebox. Swapped inputs are easy to spot when one source moves another channel's meter."
+}
