@@ -19,7 +19,7 @@ See [docs/PLAN.md](docs/PLAN.md) for the condensed plan.
 - **Phase 1, signal engine: done.**
 - **Phase 2, playable sandbox: done.** One screen with a stage view, an
   inspector (controls, probe, and what each musician hears) and the mixer.
-- **Phase 3, scenarios: done.** 16 troubleshooting scenarios with live goals,
+- **Phase 3, scenarios: done.** 26 troubleshooting scenarios with live goals,
   hints, a debrief, scoring and saved progress.
 
 ## Code layout

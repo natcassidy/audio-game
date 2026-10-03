@@ -25,6 +25,8 @@ export interface HearsCondition extends ConditionBase {
   atLeast?: Level;
   /** Minimum dB of the source at the point. */
   minDb?: number;
+  /** Maximum dB of the source at the point (e.g. a fader that must stay down). */
+  maxDb?: number;
 }
 
 /** A source must NOT reach a point (hum in the mains, the wrong mix in a wedge). */

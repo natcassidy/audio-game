@@ -1,0 +1,43 @@
+{
+  "id": "19-room-silent",
+  "title": "Wedges fine, room silent",
+  "difficulty": 1,
+  "intro": "The band can hear themselves. Look at what feeds the main speakers.",
+  "complaints": [
+    {
+      "who": "Greeter",
+      "says": "Nobody out here can hear anything, but the band sounds fine on stage."
+    }
+  ],
+  "setup": [
+    {
+      "path": "nodes.mixer.props.main.mute",
+      "value": true
+    }
+  ],
+  "win": [
+    {
+      "kind": "hears",
+      "label": "Leader vocal in the mains",
+      "point": "mixer.main.l",
+      "source": "leader:voice"
+    },
+    {
+      "kind": "hears",
+      "label": "Pastor in the mains",
+      "point": "mixer.main.l",
+      "source": "pastor:voice"
+    }
+  ],
+  "hints": [
+    "If every wedge works but the room is silent, the problem is after the channels: the Main bus or the main speakers."
+  ],
+  "solution": [
+    {
+      "path": "nodes.mixer.props.main.mute",
+      "value": false
+    }
+  ],
+  "cause": "The Main bus was muted on the mixer, so nothing reached the main speakers. The monitor mixes don't go through Main.",
+  "lesson": "Everything-silent-in-one-place points at what that place shares: here, the Main master. Check its mute and fader first."
+}
