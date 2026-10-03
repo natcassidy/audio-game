@@ -59,6 +59,5 @@ click/tracks device) and the full-soundcheck mode.
 - The click-routed-to-Main scenario, and full soundcheck from a blank board.
 - Extended devices (choir mics, in-ears, click/tracks laptop, livestream mix,
   subwoofer).
-- Pre-service rush and full-soundcheck modes.
 - Signal-flow animation.
 - Real audio with Web Audio.
