@@ -190,6 +190,13 @@ describe('probe tool', () => {
     expect(r.content.length).toBeGreaterThan(10);
   });
 
+  it('a multi-channel cable reports its loudest channel, not the sum of all of them', () => {
+    const r = probeCable(sim, 'c-network');
+    expect(r.level).toBe('good');
+    expect(r.content.length).toBeGreaterThan(10);
+    expect(probePort(sim, 'mixer', 'net').level).toBe('good');
+  });
+
   it('probes an ordinary port', () => {
     expect(probePort(sim, 'bass-di', 'thru')).toMatchObject({ label: 'Bass DI Thru (1/4", to amp)', level: 'good', summary: 'Bass' });
   });

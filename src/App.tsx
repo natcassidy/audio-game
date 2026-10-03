@@ -1,37 +1,51 @@
-import { useMemo } from 'react';
-import { CHANNEL_NAMES, createDefaultRig, probePoint, simulate } from './engine';
+import { Inspector } from './components/Inspector';
+import { MixerPanel } from './components/MixerPanel';
+import { StageView } from './components/StageView';
+import { useGame } from './store';
 
-// Placeholder until Phase 2 (patch view and probe tool): shows that the
-// signal engine runs in the browser by listing what each channel carries.
 export function App() {
-  const sim = useMemo(() => simulate(createDefaultRig()), []);
+  const reset = useGame((s) => s.reset);
+  const warnings = useGame((s) => s.sim.warnings);
   return (
-    <main style={{ fontFamily: 'system-ui, sans-serif', padding: 16, maxWidth: 900, margin: '0 auto' }}>
-      <h1>Church Sound Simulator</h1>
-      <p>Signal engine: default rig, everything working.</p>
-      <table style={{ borderCollapse: 'collapse', width: '100%' }}>
-        <thead>
-          <tr>
-            <th align="left">Channel</th>
-            <th align="left">Level</th>
-            <th align="left">Carries</th>
-          </tr>
-        </thead>
-        <tbody>
-          {CHANNEL_NAMES.map((name, i) => {
-            const r = probePoint(sim, `mixer.ch${i + 1}.pre`);
-            return (
-              <tr key={name} style={{ borderTop: '1px solid #ddd' }}>
-                <td>
-                  {i + 1}. {name}
-                </td>
-                <td>{r.level}</td>
-                <td>{r.summary}</td>
-              </tr>
-            );
-          })}
-        </tbody>
-      </table>
-    </main>
+    <div className="app">
+      <header className="topbar">
+        <h1>Church Sound Simulator</h1>
+        <span className="muted">Sandbox — everything starts working. Change anything and see what happens.</span>
+        <button onClick={reset} title="Put everything back to the working setup">
+          Reset rig
+        </button>
+      </header>
+      {warnings.length > 0 && <div className="banner">{warnings.join(' · ')}</div>}
+      <main className="workspace">
+        <div className="stage-wrap">
+          <StageView />
+          <Legend />
+        </div>
+        <Inspector />
+      </main>
+      <MixerPanel />
+    </div>
+  );
+}
+
+function Legend() {
+  return (
+    <div className="legend">
+      <span>
+        <i className="sw sw-good" /> good
+      </span>
+      <span>
+        <i className="sw sw-low" /> low
+      </span>
+      <span>
+        <i className="sw sw-hot" /> hot / clipping
+      </span>
+      <span>
+        <i className="sw sw-none" /> no signal
+      </span>
+      <span>
+        <i className="sw sw-dash" /> unplugged
+      </span>
+    </div>
   );
 }

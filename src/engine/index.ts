@@ -11,3 +11,4 @@ export { DEVICES } from './devices';
 export * from './devices/mixer';
 export * from './rigs/helpers';
 export { createDefaultRig, CHANNEL_NAMES, CH } from './rigs/default';
+export type { PreampState, StageboxProps } from './devices/stagebox';
