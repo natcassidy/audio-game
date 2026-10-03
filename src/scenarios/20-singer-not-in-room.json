@@ -1,0 +1,36 @@
+{
+  "id": "20-singer-not-in-room",
+  "title": "Singer 2 only in the wedges",
+  "difficulty": 1,
+  "complaints": [
+    {
+      "who": "Singer 2",
+      "says": "I can hear myself fine, but my family says they couldn’t hear me at all."
+    }
+  ],
+  "setup": [
+    {
+      "path": "nodes.mixer.props.channels.1.toMain",
+      "value": false
+    }
+  ],
+  "win": [
+    {
+      "kind": "hears",
+      "label": "Singer 2 in the mains",
+      "point": "mixer.main.l",
+      "source": "singer2:voice"
+    }
+  ],
+  "hints": [
+    "The wedge works, so the mic, cable and channel are fine. What's different about the path to the room?"
+  ],
+  "solution": [
+    {
+      "path": "nodes.mixer.props.channels.1.toMain",
+      "value": true
+    }
+  ],
+  "cause": "Vox 2 wasn't assigned to Main, so it went to the monitor mixes but never to the room.",
+  "lesson": "A channel can feed the wedges without feeding the room. The Main assign button decides whether a channel goes to the mains."
+}

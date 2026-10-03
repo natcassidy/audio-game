@@ -20,7 +20,7 @@ See [docs/PLAN.md](docs/PLAN.md) for the condensed plan.
 - **Phase 2, playable sandbox: done.** One screen with a top-down stage map,
   a device view (each device's real front/rear panels, with what's plugged
   into every jack) and the mixer.
-- **Phase 3, scenarios: done.** 16 troubleshooting scenarios with live goals,
+- **Phase 3, scenarios: done.** 26 troubleshooting scenarios with live goals,
   hints, a debrief, scoring and saved progress.
 
 ## Code layout

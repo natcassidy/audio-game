@@ -1,9 +1,11 @@
 // Top-down map of the stage and house. Gear is drawn roughly as it looks
 // from above; cables are hidden except for the selected device's (or all
-// of them, if the player asks), so the map stays readable.
+// of them, if the player asks), so the map stays readable. During a
+// scenario it zooms in on just the devices the problem involves.
 
-import { useState, type ReactNode } from 'react';
+import { useMemo, useState, type ReactNode } from 'react';
 import { probeCable, probePoint, type Cable, type Level, type NodeInstance, type Rig, type Vec2 } from '../engine';
+import { focusNodes } from '../game/focus';
 import { useGame } from '../store';
 import { isUnplugged } from '../ui/cables';
 import { STAGE, placementOf } from '../ui/layout';
@@ -239,22 +241,66 @@ function cablePath(rig: Rig, cable: Cable): string | null {
   return `M ${a.x} ${a.y} Q ${mx} ${my} ${b.x} ${b.y}`;
 }
 
+/** Smallest part of the stage that holds these points, kept to the full view's shape so the panel doesn't jump. */
+function viewBoxAround(points: Vec2[]): string {
+  if (points.length === 0) return `0 0 ${W} ${H}`;
+  const margin = 70;
+  let x0 = Math.min(...points.map((p) => p.x)) - margin;
+  let y0 = Math.min(...points.map((p) => p.y)) - margin;
+  const x1 = Math.max(...points.map((p) => p.x)) + margin;
+  const y1 = Math.max(...points.map((p) => p.y)) + margin;
+  // Don't zoom in so far that a two-device problem fills the screen.
+  const w = Math.min(W, Math.max(x1 - x0, (y1 - y0) * (W / H), W * 0.55));
+  const h = w * (H / W);
+  x0 = Math.min(Math.max((x0 + x1) / 2 - w / 2, 0), W - w);
+  y0 = Math.min(Math.max((y0 + y1) / 2 - h / 2, 0), H - h);
+  return `${x0} ${y0} ${w} ${h}`;
+}
+
+/** True when every plugged-in end of the cable is on a shown device. */
+function cableShown(cable: Cable, shown: (id: string) => boolean): boolean {
+  const ends = [cable.from, cable.to].filter((e) => !!e);
+  return ends.length > 0 && ends.every((e) => shown(e!.node));
+}
+
+function StageToolbar({ focusCount }: { focusCount: number | null }) {
+  const { run, wholeStage, setWholeStage, rig } = useGame();
+  if (!run || focusCount === null) return null;
+  return (
+    <div className="stage-toolbar">
+      {wholeStage ? (
+        <span className="muted">Whole stage ({Object.keys(rig.nodes).length} devices). The ones this problem involves are bright.</span>
+      ) : (
+        <span className="muted">Showing only the {focusCount} things this problem involves.</span>
+      )}
+      <button onClick={() => setWholeStage(!wholeStage)}>{wholeStage ? 'Just this problem' : 'Show whole stage'}</button>
+    </div>
+  );
+}
+
 export function StageView() {
-  const { rig, sim, selection, select } = useGame();
+  const { rig, sim, selection, select, run, wholeStage } = useGame();
+  const focus = useMemo(() => (run ? focusNodes(run.scenario) : null), [run?.scenario]);
+  const hideOthers = !!focus && !wholeStage;
+  const shown = (id: string) => !hideOthers || focus!.has(id);
+  const nodes = Object.values(rig.nodes).filter((n) => shown(n.id));
+  const viewBox = hideOthers ? viewBoxAround(nodes.map((n) => toScreen(placementOf(rig, n.id)))) : `0 0 ${W} ${H}`;
+  const [vx, vy] = viewBox.split(' ').map(Number);
   const [allCables, setAllCables] = useState(false);
   const selected = selection?.id ?? null;
   const front = toScreen({ x: 0, y: 0 });
   const back = toScreen({ x: 0, y: STAGE.depth });
 
   const touches = (c: Cable) => c.from?.node === selected || c.to?.node === selected;
-  const cables = Object.values(rig.cables).filter((c) => allCables || touches(c));
+  const cables = Object.values(rig.cables).filter((c) => (allCables || touches(c)) && cableShown(c, shown));
   // The selected device's power cord, if it goes to a strip.
   const plug = selected ? (rig.nodes[selected]?.props as { power?: { plug: string | null } } | undefined)?.power?.plug : null;
-  const cordTo = plug && plug !== 'wall' && rig.nodes[plug] ? plug : null;
+  const cordTo = plug && plug !== 'wall' && rig.nodes[plug] && shown(plug) ? plug : null;
 
   return (
     <div className="stage-wrap">
-      <svg className="stage" viewBox={`0 0 ${W} ${H}`} role="img" aria-label="Stage map">
+      <StageToolbar focusCount={focus?.size ?? null} />
+      <svg className="stage" viewBox={viewBox} role="img" aria-label="Stage map">
         <defs>
           <pattern id="boards" width="64" height="16" patternUnits="userSpaceOnUse">
             <rect width="64" height="16" className="floor-board" />
@@ -263,13 +309,13 @@ export function StageView() {
           </pattern>
         </defs>
         <rect className="house-floor" x={0} y={front.y} width={W} height={H - front.y} />
-        <rect className="stage-floor" x={PAD - 10} y={back.y - 10} width={STAGE.width * S + 20} height={front.y - back.y + 10} rx={6} fill="url(#boards)" />
+        <rect className="stage-floor" onClick={() => select(null)} x={PAD - 10} y={back.y - 10} width={STAGE.width * S + 20} height={front.y - back.y + 10} rx={6} fill="url(#boards)" />
         <line className="stage-edge" x1={PAD - 10} y1={front.y} x2={PAD + STAGE.width * S + 10} y2={front.y} />
-        <text className="area-label" x={PAD} y={back.y + 8}>
+        <text className="area-label" x={vx + 14} y={Math.max(back.y + 8, vy + 18)}>
           STAGE
         </text>
-        <text className="area-label" x={PAD + 2.2 * S} y={front.y + 20}>
-          HOUSE
+        <text className="area-label" x={Math.max(PAD + 2.2 * S, vx + 14)} y={front.y + 20}>
+          AUDIENCE
         </text>
 
         <g className="cables">
@@ -309,7 +355,7 @@ export function StageView() {
         </g>
 
         <g>
-          {Object.values(rig.nodes).map((n) => {
+          {nodes.map((n) => {
             const place = placementOf(rig, n.id);
             const p = toScreen(place);
             const soundPoint = SOUND_POINT[n.type];
@@ -319,7 +365,8 @@ export function StageView() {
             const rot = rotationOf(rig, n);
             const linked = selected && !allCables && cables.some((c) => touches(c) && (c.from?.node === n.id || c.to?.node === n.id));
             const owned = !!(n.props as { owner?: string }).owner;
-            const classes = ['device', `type-${n.type}`, owned ? 'owned' : '', off ? 'off' : '', selected === n.id ? 'selected' : '', linked || cordTo === n.id ? 'linked' : ''];
+            const dim = focus && wholeStage && !focus.has(n.id);
+            const classes = ['device', `type-${n.type}`, owned ? 'owned' : '', off ? 'off' : '', dim ? 'device-dim' : '', selected === n.id ? 'selected' : '', linked || cordTo === n.id ? 'linked' : ''];
             return (
               <g
                 key={n.id}

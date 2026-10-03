@@ -1,0 +1,38 @@
+{
+  "id": "24-hot-receiver",
+  "title": "Distorted handheld",
+  "difficulty": 2,
+  "complaints": [
+    {
+      "who": "Host",
+      "says": "The announcements sound crunchy and distorted, even when I talk quietly."
+    }
+  ],
+  "setup": [
+    {
+      "path": "nodes.rx-hh.props.outputLevel",
+      "value": "line"
+    }
+  ],
+  "win": [
+    {
+      "kind": "clean",
+      "label": "Host clean in the mains",
+      "hint": "The Handheld receiver's output is set to Line. Set it to Mic.",
+      "point": "mixer.main.l",
+      "source": "host:voice",
+      "flag": "distorted"
+    }
+  ],
+  "hints": [
+    "Distortion that doesn't depend on how loud someone talks happens before the fader. Look at the receiver and the preamp."
+  ],
+  "solution": [
+    {
+      "path": "nodes.rx-hh.props.outputLevel",
+      "value": "mic"
+    }
+  ],
+  "cause": "The handheld receiver's output was set to Line, about 30 dB hotter than the Mic level the preamp gain was set for, so the preamp clipped.",
+  "lesson": "Match a receiver's output level to how the preamp is set. Line level into a mic-level gain setting will distort."
+}

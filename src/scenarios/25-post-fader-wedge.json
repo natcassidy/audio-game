@@ -1,0 +1,49 @@
+{
+  "id": "25-post-fader-wedge",
+  "title": "Wedge follows the room fader",
+  "difficulty": 3,
+  "complaints": [
+    {
+      "who": "Worship leader",
+      "says": "You turned me down in the room for the prayer, and now I can barely hear myself in my wedge."
+    }
+  ],
+  "setup": [
+    {
+      "path": "nodes.mixer.props.mixes.0.preFader",
+      "value": false
+    },
+    {
+      "path": "nodes.mixer.props.channels.0.fader",
+      "value": -30
+    }
+  ],
+  "win": [
+    {
+      "kind": "hears",
+      "label": "Leader loud in their wedge",
+      "point": "wedge-1.sound",
+      "source": "leader:voice",
+      "minDb": 86
+    },
+    {
+      "kind": "hears",
+      "label": "Vox 1 stays down in the room",
+      "point": "mixer.main.l",
+      "source": "leader:voice",
+      "maxDb": -25,
+      "hint": "Leave the Vox 1 fader down. Change how Mix 1 picks up its sends instead."
+    }
+  ],
+  "hints": [
+    "The wedge got quieter when the room fader came down. What decides whether a monitor send follows the fader?"
+  ],
+  "solution": [
+    {
+      "path": "nodes.mixer.props.mixes.0.preFader",
+      "value": true
+    }
+  ],
+  "cause": "Mix 1 (the leader's wedge) was set to post-fader, so pulling Vox 1 down in the room also pulled it down in the wedge.",
+  "lesson": "Monitor mixes should be pre-fader, so the room mix and the wedges stay independent. Post-fader sends are for effects like reverb."
+}

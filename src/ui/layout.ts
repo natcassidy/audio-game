@@ -16,7 +16,7 @@ const DEFAULT_LAYOUT: Record<string, Placement> = {
   vox1: { x: 6, y: 1.12, short: 'Vox 1' },
   acoustic: { x: 6.3, y: 1.6, short: 'Acoustic' },
   tuner: { x: 6.75, y: 1.15, short: 'Tuner' },
-  'acoustic-di': { x: 7.15, y: 1.6, short: 'Ac. DI' },
+  'acoustic-di': { x: 7.15, y: 1.6, short: 'Acoustic DI' },
   'wedge-1': { x: 6, y: 0.45, short: 'Wedge 1' },
   // Singers along the front.
   singer2: { x: 3.9, y: 1.75, short: 'Singer 2' },
@@ -28,19 +28,19 @@ const DEFAULT_LAYOUT: Record<string, Placement> = {
   singer4: { x: 2.1, y: 2.0, short: 'Singer 4' },
   vox4: { x: 2.1, y: 1.4, short: 'Vox 4' },
   // Keys, stage right.
-  'keys-player': { x: 10.6, y: 3.75, short: 'Keys plr' },
+  'keys-player': { x: 10.6, y: 3.75, short: 'Keys player' },
   keys: { x: 10.6, y: 3.15, short: 'Keys' },
   vox5: { x: 10.0, y: 3.45, short: 'Vox 5' },
   'keys-di-l': { x: 11.6, y: 3.5, short: 'Keys DI L' },
   'keys-di-r': { x: 11.6, y: 3.95, short: 'Keys DI R' },
   'wedge-3': { x: 10.6, y: 2.25, short: 'Wedge 3' },
   // Bass, stage left.
-  'bass-player': { x: 3.1, y: 4.1, short: 'Bass plr' },
+  'bass-player': { x: 3.1, y: 4.1, short: 'Bassist' },
   bass: { x: 3.45, y: 3.85, short: 'Bass' },
   vox6: { x: 3.1, y: 3.45, short: 'Vox 6' },
   'bass-di': { x: 4.1, y: 4.5, short: 'Bass DI' },
-  'bass-amp': { x: 2.2, y: 5.0, short: 'Rumble 15' },
-  'spare-amp': { x: 1.1, y: 5.6, short: 'Peavey' },
+  'bass-amp': { x: 2.2, y: 5.0, short: 'Bass amp' },
+  'spare-amp': { x: 1.1, y: 5.6, short: 'Spare amp' },
   'wedge-4': { x: 3.1, y: 2.75, short: 'Wedge 4' },
   // Drums, upstage centre: the kit faces the congregation, the drummer sits behind it.
   drums: { x: 6.3, y: 4.6, short: 'Drums' },
@@ -53,7 +53,7 @@ const DEFAULT_LAYOUT: Record<string, Placement> = {
   // Speakers down front.
   pastor: { x: 4.8, y: 0.75, short: 'Pastor' },
   'tx-wl1': { x: 5.15, y: 0.6, short: 'WL1 pack' },
-  associate: { x: 7.2, y: 0.75, short: 'Assoc.' },
+  associate: { x: 7.2, y: 0.75, short: 'Associate' },
   'tx-wl2': { x: 7.55, y: 0.6, short: 'WL2 pack' },
   host: { x: 9.9, y: 1.0, short: 'Host' },
   'tx-hh': { x: 10.25, y: 0.75, short: 'Handheld' },
@@ -62,8 +62,8 @@ const DEFAULT_LAYOUT: Record<string, Placement> = {
   'rx-wl1': { x: 10.75, y: 6.35, short: 'WL1 rx' },
   'rx-wl2': { x: 11.45, y: 6.35, short: 'WL2 rx' },
   'rx-hh': { x: 12.15, y: 6.35, short: 'HH rx' },
-  'strip-left': { x: 1.0, y: 2.9, short: 'Strip L' },
-  'strip-right': { x: 12.0, y: 2.4, short: 'Strip R' },
+  'strip-left': { x: 1.0, y: 2.9, short: 'Power strip L' },
+  'strip-right': { x: 12.0, y: 2.4, short: 'Power strip R' },
   // The house.
   'main-l': { x: 0.6, y: -0.45, short: 'Main L' },
   'main-r': { x: 12.4, y: -0.45, short: 'Main R' },
@@ -71,7 +71,7 @@ const DEFAULT_LAYOUT: Record<string, Placement> = {
   mixer: { x: 9.6, y: -1.6, short: 'Mixer (FOH)' },
 };
 
-export const STAGE = { width: 13, depth: 6.9, house: 2.4 };
+export const STAGE = { width: 13, depth: 6.9, house: 2.8 };
 
 export function placementOf(rig: Rig, nodeId: string): Placement {
   const known = DEFAULT_LAYOUT[nodeId];

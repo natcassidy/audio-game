@@ -60,6 +60,9 @@ interface GameState {
   selection: Selection | null;
   run: Run | null;
   progress: Progress;
+  /** During a scenario: show every device, not just the ones the problem involves. */
+  wholeStage: boolean;
+  setWholeStage(on: boolean): void;
   select(selection: Selection | null): void;
   /** Change the rig. `change` mutates a copy; the simulation re-runs and a scenario is re-checked. */
   update(change: (rig: Rig) => void): void;
@@ -110,6 +113,8 @@ export const useGame = create<GameState>((set, get) => ({
   selection: null,
   run: null,
   progress: loadProgress(),
+  wholeStage: false,
+  setWholeStage: (wholeStage) => set({ wholeStage }),
   select: (selection) => set({ selection }),
   update: (change) => {
     const rig = cloneRig(get().rig);
@@ -135,6 +140,7 @@ export const useGame = create<GameState>((set, get) => ({
     set({
       screen: 'play',
       selection: null,
+      wholeStage: false,
       ...loaded,
       run: { scenario, startedAt: Date.now(), hintsShown: 0, brokenAtStart, collateralEver: [], evaluation },
     });

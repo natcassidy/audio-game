@@ -1,0 +1,42 @@
+{
+  "id": "22-keys-wrong-source",
+  "title": "Keys gone, cables fine",
+  "difficulty": 2,
+  "complaints": [
+    {
+      "who": "Keys player",
+      "says": "My keys are gone from the room and my wedge. Everything's plugged in, I checked."
+    }
+  ],
+  "setup": [
+    {
+      "path": "nodes.mixer.props.channels.6.source",
+      "value": "usb"
+    }
+  ],
+  "win": [
+    {
+      "kind": "hears",
+      "label": "Keys on their channel",
+      "point": "mixer.ch7.pre",
+      "source": "keys"
+    },
+    {
+      "kind": "hears",
+      "label": "Keys in the mains",
+      "point": "mixer.main.l",
+      "source": "keys"
+    }
+  ],
+  "hints": [
+    "Probe the stagebox input for Keys. If the signal arrives there, the problem is in the mixer channel itself."
+  ],
+  "solution": [
+    {
+      "path": "nodes.mixer.props.channels.6.source",
+      "value": "network"
+    }
+  ],
+  "cause": "The Keys channel's input source had been switched to USB (computer playback), so it ignored the stagebox input.",
+  "lesson": "Each channel picks its input: the stagebox (Network), local analog, USB or SD. After a recording or playback session, check that channels are back on Network."
+}
