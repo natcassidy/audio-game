@@ -97,6 +97,8 @@ export interface Scenario {
   win: Condition[];
   /** General nudges, given before trace-based hints. */
   hints?: string[];
+  /** Extra device ids to show on stage, beyond the ones the goals and faults involve. */
+  show?: string[];
   /** Seconds. Optional countdown. */
   timeLimit?: number;
   /** A known fix (used by tests, and to show the answer if the player gives up). */

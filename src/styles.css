@@ -124,16 +124,50 @@ h3 {
 .stage {
   width: 100%;
   height: auto;
+  max-height: 70vh;
   display: block;
 }
 
 .legend {
   display: flex;
   flex-wrap: wrap;
-  gap: 14px;
+  gap: 6px;
   font-size: 12px;
   color: var(--muted);
   padding: 4px 10px 6px;
+}
+
+.legend-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 14px;
+  width: 100%;
+}
+
+.legend-title {
+  color: var(--text);
+}
+
+.legend .device {
+  cursor: default;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.legend-glyph {
+  width: 32px;
+  height: 14px;
+}
+
+.stage-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  font-size: 13px;
+  padding: 4px 8px 6px;
 }
 
 .sw {
@@ -217,6 +251,14 @@ h3 {
   cursor: pointer;
 }
 
+.device-dim {
+  opacity: 0.3;
+}
+
+.cable-faded:not(:hover) .cable-line {
+  opacity: 0.12;
+}
+
 .device .glyph > * {
   fill: #3a404d;
   stroke: #6b7385;
@@ -267,7 +309,7 @@ h3 {
 
 .device-label {
   fill: var(--text);
-  font-size: 10.5px;
+  font-size: 11.5px;
   text-anchor: middle;
   pointer-events: none;
   paint-order: stroke;
