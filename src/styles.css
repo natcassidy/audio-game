@@ -103,16 +103,19 @@ h3 {
 
 .workspace {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 360px;
+  grid-template-columns: minmax(0, 1fr) minmax(460px, 600px);
+  align-items: start;
   gap: 12px;
   padding: 12px 16px;
 }
 
-@media (max-width: 1000px) {
+@media (max-width: 1100px) {
   .workspace {
     grid-template-columns: 1fr;
   }
 }
+
+/* --- Stage map ------------------------------------------------------------- */
 
 .stage-wrap {
   background: var(--panel);
@@ -125,80 +128,197 @@ h3 {
   width: 100%;
   height: auto;
   display: block;
+  user-select: none;
+}
+
+.house-floor {
+  fill: #1b1d23;
+}
+.stage-floor {
+  stroke: #5b4a36;
+  stroke-width: 2;
+}
+.floor-board {
+  fill: #3a3129;
+}
+.floor-seam {
+  stroke: #2e2721;
+  stroke-width: 1;
+}
+.stage-edge {
+  stroke: #8a7556;
+  stroke-width: 3;
+}
+
+.area-label {
+  fill: #a8977c;
+  font-size: 11px;
+  letter-spacing: 0.14em;
 }
 
 .legend {
   display: flex;
   flex-wrap: wrap;
-  gap: 14px;
+  align-items: center;
+  gap: 6px 14px;
   font-size: 12px;
   color: var(--muted);
-  padding: 4px 10px 6px;
+  padding: 6px 10px 4px;
+}
+.legend .push-right {
+  margin-left: auto;
+}
+.check {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  color: var(--text);
+  cursor: pointer;
 }
 
 .sw {
   display: inline-block;
   width: 18px;
   height: 0;
-  border-top: 3px solid var(--good);
+  border-top: 3px solid var(--lvl, var(--none));
   vertical-align: middle;
   margin-right: 4px;
-}
-.sw-low {
-  border-color: var(--low);
-}
-.sw-hot {
-  border-color: var(--hot);
-}
-.sw-none {
-  border-color: var(--none);
 }
 .sw-dash {
   border-top-style: dashed;
   border-color: var(--muted);
 }
 
-/* --- Stage SVG ------------------------------------------------------------ */
-
-.stage-floor {
-  fill: #23262e;
-  stroke: var(--line);
+/* Level colours, shared by cables, waves, LEDs and tape dots. */
+.lvl-none {
+  --lvl: var(--none);
+}
+.lvl-low {
+  --lvl: var(--low);
+}
+.lvl-good {
+  --lvl: var(--good);
+}
+.lvl-hot {
+  --lvl: var(--hot);
+}
+.lvl-clipping {
+  --lvl: var(--clip);
 }
 
-.area-label {
-  fill: var(--muted);
-  font-size: 11px;
-  letter-spacing: 0.1em;
+/* Glyph paints (top-down gear). */
+.g-cloth { fill: #4a5a7a; stroke: #2b3447; }
+.g-skin { fill: #c9a27e; stroke: #8a6a4f; }
+.g-pew { fill: #4b3c2e; stroke: #33291f; }
+.g-stand { stroke: #9aa1ad; stroke-width: 1.6; stroke-linecap: round; }
+.g-dark { fill: #2a2c31; stroke: #5d626c; stroke-width: 1.2; }
+.g-grille { fill: #4a4e57; stroke: #6e7480; stroke-width: 0.8; stroke-dasharray: 1.5 1; }
+.g-metal { fill: #b9bec7; stroke: #6e7480; }
+.g-keys { fill: #ece8df; }
+.g-wood { fill: #b07a3c; stroke: #6b4520; }
+.g-wood-dark { fill: #5a3a1c; stroke: #3a2512; }
+.g-hole { fill: #1a1a1a; }
+.g-drum { fill: #7a2a2a; stroke: #3e1414; }
+.g-drumhead { fill: #e8e4da; stroke: #7a2a2a; stroke-width: 2; }
+.g-cymbal { fill: rgba(212, 175, 55, 0.55); stroke: #c9a227; }
+.g-steel { fill: #3f6aa0; stroke: #233d5e; }
+.g-pedal { fill: #d27b22; stroke: #7d4610; }
+.g-rack { fill: #1f2125; stroke: #6b7180; }
+.g-lcd { fill: #3d5a3a; }
+.g-strip { fill: #2f3136; stroke: #6b7180; }
+.g-desk { fill: #3b3127; stroke: #2a221b; }
+.g-fader { stroke: #9aa1ad; stroke-width: 1.4; }
+
+.device {
+  cursor: pointer;
+}
+.device .glyph {
+  transition: opacity 0.15s;
+}
+.device.off .glyph {
+  opacity: 0.4;
+}
+.device:hover .glyph,
+.device.selected .glyph {
+  filter: drop-shadow(0 0 3px var(--accent));
+}
+.device.selected .glyph {
+  filter: drop-shadow(0 0 2px var(--accent)) drop-shadow(0 0 6px var(--accent));
+}
+.device.linked .glyph {
+  filter: drop-shadow(0 0 3px #e6e8ee);
+}
+
+.device .hit {
+  fill: transparent;
+}
+/* Personal mics and packs are labelled by their owner; their own label shows on demand. */
+.device.owned .device-label {
+  display: none;
+}
+.device.owned:hover .device-label,
+.device.owned.selected .device-label,
+.device.owned.linked .device-label {
+  display: inline;
+}
+
+.device-label {
+  fill: var(--text);
+  font-size: 10px;
+  text-anchor: middle;
+  pointer-events: none;
+  paint-order: stroke;
+  stroke: #15171c;
+  stroke-width: 3px;
+  opacity: 0.85;
+}
+.device.type-mic .device-label,
+.device.type-wireless-tx .device-label,
+.device.type-di .device-label,
+.device.type-tuner .device-label {
+  font-size: 8.5px;
+  opacity: 0.7;
+}
+.device.selected .device-label,
+.device.linked .device-label {
+  opacity: 1;
+  font-weight: 600;
+}
+
+.waves path {
+  fill: none;
+  stroke: var(--lvl);
+  stroke-width: 2;
+  stroke-linecap: round;
+  opacity: 0.8;
+}
+.waves.squeal path {
+  animation: pulse 0.5s infinite alternate;
+}
+@keyframes pulse {
+  to {
+    stroke-width: 5;
+    opacity: 1;
+  }
 }
 
 .cable {
   cursor: pointer;
 }
-
 .cable-hit {
   fill: none;
   stroke: transparent;
   stroke-width: 12;
 }
-
 .cable-line {
   fill: none;
-  stroke-width: 2;
-  stroke: var(--none);
-  opacity: 0.85;
+  stroke-width: 2.5;
+  stroke: var(--lvl);
+  stroke-linecap: round;
 }
-
-.cable-good .cable-line {
-  stroke: var(--good);
-}
-.cable-low .cable-line {
-  stroke: var(--low);
-}
-.cable-hot .cable-line {
-  stroke: var(--hot);
-}
-.cable-clipping .cable-line {
-  stroke: var(--clip);
+.cable.faint .cable-line {
+  opacity: 0.3;
+  stroke-width: 1.5;
 }
 .cable-network .cable-line {
   stroke-width: 4;
@@ -209,70 +329,707 @@ h3 {
 }
 .cable.selected .cable-line,
 .cable:hover .cable-line {
-  stroke-width: 4;
+  stroke-width: 4.5;
   opacity: 1;
 }
-
-.device {
-  cursor: pointer;
-}
-
-.device .glyph > * {
-  fill: #3a404d;
-  stroke: #6b7385;
+.cable-power {
+  fill: none;
+  stroke: #c9c3b5;
   stroke-width: 1.5;
+  stroke-dasharray: 2 3;
+  pointer-events: none;
 }
 
-.device.shape-person .glyph > * {
-  fill: #4b5875;
+/* --- Device panels ---------------------------------------------------------- */
+
+.faces {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: 12px 0;
 }
 
-.device.status-off .glyph > * {
-  fill: #23262e;
-  stroke: #4a505e;
-  stroke-dasharray: 3 2;
+.face {
+  margin: 0;
+  border-radius: 6px;
+  padding: 8px 12px 10px;
+  background: linear-gradient(180deg, #2b2e34, #1d1f23);
+  border: 1px solid #4a4f59;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08), 0 2px 6px rgba(0, 0, 0, 0.4);
+  position: relative;
+}
+.face figcaption {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  font-size: 10.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #9aa1ad;
+  margin-bottom: 6px;
+}
+.face-brand {
+  color: #d9dce3;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: none;
+  font-size: 12px;
 }
 
-.device.status-lvl-good .glyph > * {
-  stroke: var(--good);
-  stroke-width: 2.5;
+/* Rack gear gets ears with screw holes. */
+.face-rack {
+  background: linear-gradient(180deg, #34373e, #222429);
+  margin: 0 14px;
 }
-.device.status-lvl-low .glyph > * {
-  stroke: var(--low);
-  stroke-width: 2.5;
+.face-rack::before,
+.face-rack::after {
+  content: '';
+  position: absolute;
+  top: -1px;
+  bottom: -1px;
+  width: 14px;
+  background: radial-gradient(circle at 50% 18px, #111 3px, transparent 3.5px), radial-gradient(circle at 50% calc(100% - 18px), #111 3px, transparent 3.5px),
+    linear-gradient(90deg, #3c4048, #2a2d33);
+  border: 1px solid #4a4f59;
 }
-.device.status-lvl-hot .glyph > *,
-.device.status-lvl-clipping .glyph > * {
-  stroke: var(--hot);
-  stroke-width: 2.5;
+.face-rack::before {
+  left: -15px;
+  border-radius: 3px 0 0 3px;
+}
+.face-rack::after {
+  right: -15px;
+  border-radius: 0 3px 3px 0;
+}
+.face-box {
+  background: linear-gradient(180deg, #3f6aa0, #2c4d78);
+  border-color: #233d5e;
+}
+.face-box figcaption,
+.face-box .silk,
+.face-box .ctl-label,
+.face-box .jack-label {
+  color: #e3ecf8;
+}
+.face-speaker {
+  background: repeating-linear-gradient(45deg, #1b1c1f 0 2px, #222327 2px 4px);
+}
+.face-pedal {
+  background: linear-gradient(180deg, #d98a33, #b2661a);
+  border-color: #7d4610;
+}
+.face-pedal figcaption,
+.face-pedal .silk,
+.face-pedal .ctl-label,
+.face-pedal .jack-label {
+  color: #2a1a08;
+}
+.face-pedal .face-brand {
+  color: #1a1004;
+}
+.face-mic,
+.face-pack {
+  background: linear-gradient(180deg, #45484f, #2a2c31);
+  border-radius: 18px;
+}
+.face-instrument {
+  background: linear-gradient(180deg, #8a5a2b, #6a4220);
+  border-color: #3a2512;
+}
+.face-instrument figcaption,
+.face-instrument .silk,
+.face-instrument .ctl-label,
+.face-instrument .jack-label {
+  color: #f3e3cc;
+}
+.face-strip {
+  background: linear-gradient(180deg, #303238, #23252a);
+}
+.face-off .led.on,
+.face-off .lcd {
+  filter: grayscale(1) brightness(0.5);
 }
 
-.device.squeal .glyph > * {
-  stroke: var(--clip);
-  stroke-width: 4;
-  animation: pulse 0.5s infinite alternate;
+.face-body {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 18px;
+  align-items: flex-start;
+}
+.face-section {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.silk {
+  font-size: 9.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: #c7ccd6;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.25);
+  padding-bottom: 2px;
+}
+.face-items {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 10px;
+  align-items: flex-start;
+}
+.face-items[style] {
+  display: grid;
+}
+.print {
+  margin: 0;
+  max-width: 220px;
+  font-size: 11.5px;
+  color: #c7ccd6;
 }
 
-@keyframes pulse {
+/* A jack with its label above and whatever is plugged into it below. */
+.jack-cell {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  min-width: 46px;
+  position: relative;
+}
+.jack-label,
+.ctl-label {
+  font-size: 10px;
+  color: #c7ccd6;
+  white-space: nowrap;
+}
+.jack-leds {
+  position: absolute;
+  top: 16px;
+  right: -2px;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.jack,
+.inlet,
+.outlet {
+  all: unset;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+  min-height: 34px;
+}
+.jack:focus-visible,
+.outlet:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+.jack-target .socket {
+  box-shadow: 0 0 0 2px var(--accent), 0 0 8px var(--accent);
+  animation: blink 1s infinite alternate;
+}
+@keyframes blink {
   to {
-    stroke-width: 7;
+    box-shadow: 0 0 0 2px var(--accent);
   }
 }
 
-.device.selected .glyph > *,
-.device:hover .glyph > * {
-  stroke: var(--accent);
-  stroke-width: 3;
+.socket {
+  display: block;
+  position: relative;
+  background: radial-gradient(circle, #0c0c0d 55%, #6d727c 58%, #9ca1aa 70%, #4a4e57 100%);
+  border-radius: 50%;
+}
+.socket-xlr {
+  width: 28px;
+  height: 28px;
+}
+.socket-xlr i {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: #5a5f69;
+}
+.socket-xlr i:nth-child(1) {
+  left: 8px;
+  top: 9px;
+}
+.socket-xlr i:nth-child(2) {
+  right: 8px;
+  top: 9px;
+}
+.socket-xlr i:nth-child(3) {
+  left: 12px;
+  bottom: 7px;
+}
+.socket-male {
+  background: radial-gradient(circle, #2a2c31 62%, #9ca1aa 66%, #4a4e57 100%);
+}
+.socket-male i {
+  background: #d9dde4;
+  width: 5px;
+  height: 5px;
+}
+.socket-male::after {
+  content: '';
+  position: absolute;
+  top: 1px;
+  left: 50%;
+  width: 6px;
+  height: 4px;
+  margin-left: -3px;
+  background: #0c0c0d;
+  border-radius: 0 0 2px 2px;
+}
+.socket-qi {
+  width: 20px;
+  height: 20px;
+  margin: 4px;
+  background: radial-gradient(circle, #050505 30%, #c0c4cc 34%, #8a8f99 60%, #3a3d44 100%);
+}
+.socket-net {
+  width: 30px;
+  height: 26px;
+  border-radius: 6px;
+  background: linear-gradient(#0c0c0d, #0c0c0d) center / 16px 11px no-repeat, radial-gradient(circle, #6d727c, #3a3d44);
+}
+.socket-iec {
+  width: 28px;
+  height: 20px;
+  border-radius: 4px 4px 9px 9px;
+  background: linear-gradient(#0c0c0d, #0c0c0d) center / 20px 12px no-repeat, #6d727c;
+}
+.socket-outlet {
+  width: 24px;
+  height: 24px;
+  border-radius: 5px;
+  background: radial-gradient(circle at 35% 50%, #111 2px, transparent 2.5px), radial-gradient(circle at 65% 50%, #111 2px, transparent 2.5px),
+    #d8d4ca;
 }
 
-.device-label {
-  fill: var(--text);
-  font-size: 10.5px;
-  text-anchor: middle;
-  pointer-events: none;
-  paint-order: stroke;
-  stroke: #15171c;
-  stroke-width: 3px;
+/* The plug sits over the socket; its cable hangs down to a tape label. */
+.plug {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  border-radius: 50%;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.6);
+}
+.plug-xlr {
+  width: 30px;
+  height: 30px;
+  top: -1px;
+  background: radial-gradient(circle, #3a3d44 40%, #15161a 42%, #24262b 70%, #b5bac3 72%, #7d828c 100%);
+}
+.plug-quarter-inch {
+  width: 22px;
+  height: 22px;
+  top: 3px;
+  background: radial-gradient(circle, #1a1b1f 45%, #c7cbd2 48%, #7d828c 100%);
+}
+.plug-network {
+  width: 28px;
+  height: 24px;
+  top: 1px;
+  border-radius: 6px;
+  background: linear-gradient(180deg, #3b5f9e, #233c66);
+}
+.plug-iec,
+.plug-power {
+  width: 24px;
+  height: 18px;
+  top: 1px;
+  border-radius: 4px 4px 8px 8px;
+  background: linear-gradient(180deg, #2a2b2f, #141416);
+}
+.plug-power {
+  width: 20px;
+  top: 3px;
+}
+.tail {
+  width: 5px;
+  height: 12px;
+  margin-top: -2px;
+  background: #121316;
+  border-left: 2px solid var(--lvl, #121316);
+  border-radius: 0 0 2px 2px;
+}
+.tail-power {
+  border-left-color: #121316;
+}
+.tape {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  max-width: 100px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  background: #ebe4cf;
+  color: #1b1b1b;
+  font: 600 10px/1.3 'Marker Felt', 'Comic Sans MS', 'Segoe Print', system-ui, sans-serif;
+  padding: 1px 5px;
+  border-radius: 1px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+  transform: rotate(-2deg);
+}
+.tape-dot {
+  flex: none;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--lvl);
+}
+select.tape-select {
+  appearance: auto;
+  border: none;
+  cursor: pointer;
+  max-width: 90px;
+}
+.tape-loose {
+  background: #efc9c0;
+  outline: 1px dashed #b33;
+}
+
+.has-plug:hover .plug,
+.has-plug.focused .plug {
+  box-shadow: 0 0 0 2px var(--accent), 0 2px 4px rgba(0, 0, 0, 0.6);
+}
+.has-plug.focused .tape {
+  outline: 2px solid var(--accent);
+}
+/* Pulled out: the plug hangs below and to the side of an empty socket. */
+.plug-loose .plug {
+  top: 20px;
+  left: 70%;
+  transform: rotate(35deg);
+  opacity: 0.95;
+}
+.plug-loose .tail {
+  margin-top: 12px;
+  transform: translateX(8px) rotate(20deg);
+}
+
+.inlet-cell .link.tiny {
+  font-size: 10px;
+}
+.outlets {
+  display: flex;
+  gap: 6px 10px;
+  flex-wrap: wrap;
+}
+
+/* Knobs, switches, LEDs and displays. */
+.ctl {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  min-width: 40px;
+}
+.ctl-value {
+  font-size: 10px;
+  color: #c7ccd6;
+  font-variant-numeric: tabular-nums;
+}
+.face-box .ctl-value,
+.face-instrument .ctl-value {
+  color: #f3e3cc;
+}
+.face-pedal .ctl-value {
+  color: #2a1a08;
+}
+
+.knob {
+  all: unset;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 50% 50%, transparent 60%, rgba(255, 255, 255, 0.15) 61%, transparent 66%);
+  display: grid;
+  place-items: center;
+  cursor: ns-resize;
+  touch-action: none;
+}
+.knob:focus-visible {
+  outline: 2px solid var(--accent);
+}
+.knob-cap {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 40% 35%, #555a63, #1c1d21 70%);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.6), inset 0 0 0 1px #0a0a0b;
+  position: relative;
+}
+.knob-mark {
+  position: absolute;
+  left: 50%;
+  top: 2px;
+  width: 2px;
+  height: 9px;
+  margin-left: -1px;
+  background: #f2f2f2;
+  border-radius: 1px;
+}
+
+.toggle {
+  all: unset;
+  width: 16px;
+  height: 28px;
+  border-radius: 4px;
+  background: #0f1012;
+  border: 1px solid #5d626c;
+  position: relative;
+  cursor: pointer;
+}
+.toggle:focus-visible {
+  outline: 2px solid var(--accent);
+}
+.lever {
+  position: absolute;
+  left: 2px;
+  right: 2px;
+  height: 12px;
+  bottom: 2px;
+  border-radius: 3px;
+  background: linear-gradient(180deg, #c7cbd2, #7d828c);
+  transition: bottom 0.1s;
+}
+.toggle.on .lever {
+  bottom: 12px;
+}
+.toggle.on {
+  box-shadow: 0 0 0 1px var(--good);
+}
+
+.slide {
+  display: inline-flex;
+  border: 1px solid #5d626c;
+  border-radius: 4px;
+  overflow: hidden;
+  background: #0f1012;
+}
+.slide button {
+  border: none;
+  border-radius: 0;
+  background: transparent;
+  font-size: 10px;
+  padding: 2px 6px;
+  color: #9aa1ad;
+}
+.slide button.on {
+  background: linear-gradient(180deg, #c7cbd2, #7d828c);
+  color: #111;
+}
+.stepper {
+  display: inline-flex;
+  gap: 2px;
+}
+.stepper button {
+  font-size: 9px;
+  padding: 2px 5px;
+  background: #15161a;
+}
+.push {
+  font-size: 11px;
+  padding: 3px 8px;
+  background: linear-gradient(180deg, #4b4f58, #2a2c31);
+  border-color: #15161a;
+  box-shadow: 0 2px 0 #0b0b0c;
+}
+.push:active {
+  transform: translateY(1px);
+  box-shadow: none;
+}
+.push-battery {
+  background: repeating-linear-gradient(90deg, #3a3d44 0 3px, #2a2c31 3px 6px);
+}
+
+.led {
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #2a1d1d;
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.6);
+}
+.led-big {
+  width: 10px;
+  height: 10px;
+  margin: 4px 0;
+  background: #1e2a1e;
+}
+.led.on {
+  background: #4cff8a;
+  box-shadow: 0 0 6px #4cff8a;
+}
+.led.on.bad {
+  background: #ff4d4d;
+  box-shadow: 0 0 6px #ff4d4d;
+}
+.led-sig {
+  background: #1a2a1d;
+}
+.led-sig.lvl-low,
+.led-sig.lvl-good,
+.led-sig.lvl-hot,
+.led-sig.lvl-clipping {
+  background: var(--lvl);
+  box-shadow: 0 0 5px var(--lvl);
+}
+.led-48 {
+  background: #2a1d1d;
+}
+.led-48.on {
+  background: #ff5a3c;
+  box-shadow: 0 0 5px #ff5a3c;
+}
+
+.bars {
+  display: inline-flex;
+  align-items: flex-end;
+  gap: 2px;
+  height: 18px;
+}
+.bars i {
+  width: 4px;
+  background: #23272e;
+  border-radius: 1px;
+}
+.bars i.on {
+  background: #4cff8a;
+}
+.bars i.on.bad {
+  background: #ffb03c;
+}
+.ladder {
+  display: inline-flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.ladder i {
+  width: 12px;
+  height: 3px;
+  background: #23272e;
+}
+.ladder i.on {
+  background: var(--good);
+}
+.ladder i.on.seg-4 {
+  background: var(--hot);
+}
+.ladder i.on.seg-5 {
+  background: var(--clip);
+}
+.lcd {
+  display: inline-block;
+  min-width: 92px;
+  min-height: 20px;
+  padding: 2px 6px;
+  border-radius: 3px;
+  background: #9fbf7a;
+  color: #142010;
+  font: 600 12px/16px ui-monospace, 'SF Mono', Menlo, monospace;
+  text-align: right;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.5);
+}
+.lcd-off {
+  background: #2b3328;
+}
+
+/* --- Cable card ------------------------------------------------------------- */
+
+.cable-card {
+  background: var(--panel-2);
+  border: 1px solid var(--accent);
+  border-radius: 8px;
+  padding: 8px 12px 10px;
+  margin: 8px 0;
+}
+.cable-card-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+.cable-card h3 {
+  margin: 0;
+  color: var(--text);
+  text-transform: none;
+  letter-spacing: 0;
+  font-size: 14px;
+}
+.cable-run {
+  list-style: none;
+  margin: 8px 0;
+  padding: 0;
+}
+.cable-run li {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 10px;
+  padding: 6px 0 6px 18px;
+  position: relative;
+}
+.cable-run li::before {
+  content: '';
+  position: absolute;
+  left: 3px;
+  top: 10px;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--good);
+}
+.cable-run li.end-loose::before {
+  background: transparent;
+  border: 2px dashed var(--clip);
+  width: 6px;
+  height: 6px;
+}
+.cable-run li:first-child::after {
+  content: '';
+  position: absolute;
+  left: 6px;
+  top: 21px;
+  bottom: -10px;
+  border-left: 3px solid var(--line);
+}
+.end-where {
+  flex: 1 1 140px;
+}
+.end-state {
+  font-size: 12px;
+  color: var(--good);
+}
+.end-state.bad {
+  color: var(--clip);
+}
+.cable-wire {
+  flex-basis: 100%;
+  font-size: 12.5px;
+  padding: 4px 0;
+}
+.cable-run select,
+.cable-run button {
+  font-size: 12px;
+}
+button.primary {
+  background: #1d3a5c;
+  border-color: var(--accent);
+}
+.link.tiny {
+  font-size: 11px;
+}
+
+.gear-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 8px;
 }
 
 /* --- Inspector ------------------------------------------------------------ */
@@ -283,7 +1040,9 @@ h3 {
   border-radius: 10px;
   padding: 12px 14px;
   overflow: auto;
-  max-height: 72vh;
+  max-height: calc(100vh - 90px);
+  position: sticky;
+  top: 8px;
 }
 
 .control {
@@ -316,60 +1075,6 @@ h3 {
   padding: 0;
   color: var(--accent);
   text-align: left;
-}
-
-.lights {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-}
-
-.light,
-.light-bars,
-.light-text {
-  font-size: 12px;
-  padding: 2px 8px;
-  border-radius: 10px;
-  background: var(--panel-2);
-  border: 1px solid var(--line);
-  color: var(--muted);
-}
-
-.light-on {
-  color: #0d1f14;
-  background: var(--good);
-  border-color: var(--good);
-}
-
-.light-bad {
-  color: #26100f;
-  background: var(--clip);
-  border-color: var(--clip);
-}
-
-.light-bars {
-  color: var(--good);
-}
-
-.ports {
-  width: 100%;
-  border-collapse: collapse;
-  font-size: 12.5px;
-}
-
-.ports th {
-  text-align: left;
-  font-weight: normal;
-  color: var(--muted);
-  white-space: nowrap;
-  padding-right: 6px;
-}
-
-.ports td,
-.ports th {
-  border-top: 1px solid var(--line);
-  padding: 4px 4px;
-  vertical-align: top;
 }
 
 .level {

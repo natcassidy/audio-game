@@ -17,7 +17,11 @@ import {
 import type { Scenario } from './game/types';
 import { scenarioById } from './scenarios';
 
-export type Selection = { kind: 'node'; id: string } | { kind: 'cable'; id: string };
+/** A device, optionally with one of its cables picked out (to inspect or follow). */
+export interface Selection {
+  id: string;
+  cable?: string;
+}
 export type Screen = 'sandbox' | 'menu' | 'play';
 
 export interface RunResult {

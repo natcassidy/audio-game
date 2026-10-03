@@ -15,21 +15,27 @@ Core devices, the default church rig, and unit tests.
 Merges the old phases 2–5 (patch view, probe tool, mixer view, stage view,
 "who hears what").
 
-- **Stage view:** every device and cable on a top-down stage. Cables are
-  coloured by signal level and dashed when unplugged.
-- **Inspector:** click anything.
-  - **Devices:** controls (with tooltips), lights and meters, and a probe
-    reading for every jack.
-  - **Cables:** what they carry. Plug back in, swap for a new one, or move
-    an end to another jack.
-  - **Musicians:** what they hear, loudest first. This is the "who hears
-    what" view.
+- **Stage map:** a top-down drawing of the stage and house: mic stands,
+  wedges aimed at their musician, amps, the kit, the keyboard, the stagebox
+  and wireless rack, the pews and the FOH desk. Speakers show sound waves
+  coloured by level. Only the selected device's cables are drawn (plus its
+  power cord); "Show every cable" draws the rest faintly.
+- **Device view:** click anything.
+  - **Devices:** the real front/rear panels (`src/ui/panels.ts`): jacks,
+    knobs, switches, LEDs, meters and displays. Each jack shows the plug in
+    it and a tape label naming the far end; a pulled-out plug hangs below
+    its jack. The power inlet's tape shows where the cord goes, and a power
+    strip shows what's plugged into its outlets.
+  - **Cables:** click a plug to see what the cable carries, pull out or
+    plug in either end, swap it, or move it (pick a jack, or click an empty
+    one on the panel). "Follow it" jumps to the device at the other end.
+  - **Musicians:** their gear, and what they hear, loudest first.
 - **Mixer panel:** 16 strips, Main / Mix 1–8 select with the "Editing MIX 3,
   not Main" banner, the master, the Fat Channel (source, gain, 48V, HPF, EQ,
   pan, Main assign, link), solo to headphones, and the output patch.
 
-**Cut to keep it simple:** drag-to-connect cables (you click to reseat, swap
-or move an end instead), the separate patch table, scenes, and FX in the UI
+**Cut to keep it simple:** drag-to-connect cables (you click a plug, then
+reseat, swap or move it), the separate patch table, scenes, and FX in the UI
 (still in the engine), and Mixes 9–16 in the UI.
 
 ### Phase 3: Scenarios

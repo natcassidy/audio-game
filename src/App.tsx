@@ -32,38 +32,13 @@ export function App() {
           {warnings.length > 0 && <div className="banner">{warnings.join(' · ')}</div>}
           <ScenarioBar />
           <main className="workspace">
-            <div className="stage-wrap">
-              <StageView />
-              <Legend />
-            </div>
+            <StageView />
             <Inspector />
           </main>
           <MixerPanel />
           <Debrief />
         </>
       )}
-    </div>
-  );
-}
-
-function Legend() {
-  return (
-    <div className="legend">
-      <span>
-        <i className="sw sw-good" /> good
-      </span>
-      <span>
-        <i className="sw sw-low" /> low
-      </span>
-      <span>
-        <i className="sw sw-hot" /> hot / clipping
-      </span>
-      <span>
-        <i className="sw sw-none" /> no signal
-      </span>
-      <span>
-        <i className="sw sw-dash" /> unplugged
-      </span>
     </div>
   );
 }
